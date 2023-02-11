@@ -15,6 +15,7 @@ export default function RootLayout({
       <head />
       <body>
         <Navbar />
+        <main className="w-full h-full">{children}</main>
       </body>
     </html>
   )
