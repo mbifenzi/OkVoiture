@@ -8,6 +8,7 @@ import Metadata from "@/context/Metadata.json";
 import { TPostMetadata } from "@/global/types";
 import Image from "next/image";
 import Car from "@/assets/default_car.jpg";
+import CarListItemModal from "@/modals/CarListItemModal";
 const country = [
   "Casablanca",
   "Rabat",
@@ -143,11 +144,7 @@ const CarList = () => {
       })}
       {showModal && (
         <div>
-          <Modal centered opened={showModal} onClose={() => setShowModal(false)}>
-            <h1>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam
-            </h1>
-          </Modal>
+          <CarListItemModal setShowModal={setShowModal} showModal={true} />
         </div>
       )}
     </div>
