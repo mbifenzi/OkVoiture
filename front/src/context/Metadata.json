@@ -1,0 +1,52 @@
+[
+  {
+      "id": "1",
+      "car_name": "Toyota Camry",
+      "car_color": "Red",
+      "car_price": "$25,000",
+      "car_description": "This is a beautifully maintained Toyota Camry with low mileage.",
+      "car_image": "../assets/default_car.jpg",
+      "created_at": "2023-02-12T10:00:00Z",
+      "updated_at": "2023-02-12T10:00:00Z"
+  },
+  {
+      "id": "2",
+      "car_name": "Honda Civic",
+      "car_color": "Silver",
+      "car_price": "$20,000",
+      "car_description": "This Honda Civic is in great condition and is ready for a new owner.",
+      "car_image": "/src/assets/default_car.jpg",
+      "created_at": "2023-02-12T10:00:00Z",
+      "updated_at": "2023-02-12T10:00:00Z"
+  },
+  {
+      "id": "3",
+      "car_name": "Nissan Altima",
+      "car_color": "Blue",
+      "car_price": "$22,000",
+      "car_description": "This Nissan Altima has a clean history and has been well maintained.",
+      "car_image": "/assets/default_car.jpg",
+      "created_at": "2023-02-12T10:00:00Z",
+      "updated_at": "2023-02-12T10:00:00Z"
+  },
+  {
+      "id": "4",
+      "car_name": "Tesla Model 3",
+      "car_color": "Black",
+      "car_price": "$45,000",
+      "car_description": "This Tesla Model 3 is fully electric and comes loaded with all the latest features.",
+      "car_image": "/assets/default_car.jpg",
+      "created_at": "2023-02-12T10:00:00Z",
+      "updated_at": "2023-02-12T10:00:00Z"
+  },
+  {
+      "id": "5",
+      "car_name": "Ford Focus",
+      "car_color": "Green",
+      "car_price": "$18,000",
+      "car_description": "This Ford Focus is fuel efficient and has a spacious interior.",
+      "car_image": "/assets/default_car.jpg",
+      "created_at": "2023-02-12T10:00:00Z",
+      "updated_at": "2023-02-12T10:00:00Z"
+  }
+]
