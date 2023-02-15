@@ -24,6 +24,14 @@ export interface IUser {
     cover_url: string;
     posts: IPost[];
   }
+export interface IUserMetadata {
+    id: string;
+    first_name: string;
+    last_name: string;
+    email: string;
+    bio: string;
+    avatar_url: string;
+    }
 
   export interface TPost{
     id: string;
@@ -37,7 +45,7 @@ export interface IUser {
     created_at: Date;
     updated_at: Date;
     reserved_at: Date[];
-    owner: IUser;
+    owner: IUserMetadata;
 }
 
 export interface TPostMetadata {

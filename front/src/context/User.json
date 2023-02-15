@@ -1,0 +1,68 @@
+{
+    "id": "1",
+    "username": "johndoe",
+    "first_name": "John",
+    "last_name": "Doe",
+    "email": "johndoe@example.com",
+    "bio": "Just your average John Doe",
+    "avatar_url": "https://example.com/avatar.png",
+    "cover_url": "https://example.com/cover.png",
+    "posts": [
+      {
+        "id": "1",
+        "title": "My First Post",
+        "body": "This is the body of my first post",
+        "created_at": "2022-01-01T00:00:00.000Z",
+        "updated_at": "2022-01-01T00:00:00.000Z"
+      },
+      {
+        "id": "2",
+        "title": "My Second Post",
+        "body": "This is the body of my second post",
+        "created_at": "2022-01-02T00:00:00.000Z",
+        "updated_at": "2022-01-02T00:00:00.000Z"
+      },
+      {
+        "id": "3",
+        "title": "My 3 Post",
+        "body": "This is the body of my second post",
+        "created_at": "2022-01-02T00:00:00.000Z",
+        "updated_at": "2022-01-02T00:00:00.000Z"
+      },
+      {
+        "id": "3",
+        "title": "My 3 Post",
+        "body": "This is the body of my second post",
+        "created_at": "2022-01-02T00:00:00.000Z",
+        "updated_at": "2022-01-02T00:00:00.000Z"
+      },
+      {
+        "id": "3",
+        "title": "My 3 Post",
+        "body": "This is the body of my second post",
+        "created_at": "2022-01-02T00:00:00.000Z",
+        "updated_at": "2022-01-02T00:00:00.000Z"
+      },
+      {
+        "id": "3",
+        "title": "My 3 Post",
+        "body": "This is the body of my second post",
+        "created_at": "2022-01-02T00:00:00.000Z",
+        "updated_at": "2022-01-02T00:00:00.000Z"
+      },
+      {
+        "id": "3",
+        "title": "My 3 Post",
+        "body": "This is the body of my second post",
+        "created_at": "2022-01-02T00:00:00.000Z",
+        "updated_at": "2022-01-02T00:00:00.000Z"
+      },
+      {
+        "id": "4",
+        "title": "My 4 Post",
+        "body": "This is the body of my second post",
+        "created_at": "2022-01-02T00:00:00.000Z",
+        "updated_at": "2022-01-02T00:00:00.000Z"
+      }
+    ]
+  }

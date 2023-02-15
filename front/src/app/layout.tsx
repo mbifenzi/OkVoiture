@@ -1,11 +1,27 @@
 import Navbar from "@/components/Navbar";
+import {FooterSimple} from "@/components/Footer";
 import "./globals.css";
+
+interface FooterSimpleProps {
+  links: { link: string; label: string }[];
+}
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+
+  const Links: FooterSimpleProps = {
+    links: [
+      { link: "home", label: "home" },
+      { link: "dashboard", label: "dashboard" },
+      { link: "contact", label: "contact" },
+      { link: " terms", label: "terms" },
+      { link: "about", label: "about" },
+    ],
+  };
+  
   return (
     <html lang="en">
       {/*
@@ -26,6 +42,7 @@ export default function RootLayout({
             <div className="w-1/4 bg-gray-300 m-2 rounded-md">ads</div>
           </div>
         </main>
+          <FooterSimple links={Links.links} />
       </body>
     </html>
   );

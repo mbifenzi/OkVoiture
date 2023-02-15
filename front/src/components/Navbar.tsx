@@ -1,195 +1,298 @@
 "use client";
-import React, { useState, Fragment, useRef, useEffect } from "react";
-import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import {
+  createStyles,
+  Header,
+  HoverCard,
+  Group,
+  Button,
+  UnstyledButton,
+  Text,
+  SimpleGrid,
+  ThemeIcon,
+  Anchor,
+  Divider,
+  Center,
+  Box,
+  Burger,
+  Drawer,
+  Collapse,
+  ScrollArea,
+} from "@mantine/core";
+import { MantineLogo } from "@mantine/ds";
+import { useDisclosure } from "@mantine/hooks";
+import {
+  IconNotification,
+  IconCode,
+  IconBook,
+  IconChartPie3,
+  IconFingerprint,
+  IconCoin,
+  IconChevronDown,
+} from "@tabler/icons-react";
+
+import { useState } from "react";
+import SignUpModal from "@/modals/SignUpModal";
+import Link from "next/link";
+const useStyles = createStyles((theme) => ({
+  link: {
+    display: "flex",
+    alignItems: "center",
+    height: "100%",
+    paddingLeft: theme.spacing.md,
+    paddingRight: theme.spacing.md,
+    textDecoration: "none",
+    color: theme.colorScheme === "dark" ? theme.white : theme.black,
+    fontWeight: 500,
+    fontSize: theme.fontSizes.sm,
+
+    [theme.fn.smallerThan("sm")]: {
+      height: 42,
+      display: "flex",
+      alignItems: "center",
+      width: "100%",
+    },
+
+    ...theme.fn.hover({
+      backgroundColor:
+        theme.colorScheme === "dark"
+          ? theme.colors.dark[6]
+          : theme.colors.gray[0],
+    }),
+  },
+
+  subLink: {
+    width: "100%",
+    padding: `${theme.spacing.xs}px ${theme.spacing.md}px`,
+    borderRadius: theme.radius.md,
+
+    ...theme.fn.hover({
+      backgroundColor:
+        theme.colorScheme === "dark"
+          ? theme.colors.dark[7]
+          : theme.colors.gray[0],
+    }),
+
+    "&:active": theme.activeStyles,
+  },
+
+  dropdownFooter: {
+    backgroundColor:
+      theme.colorScheme === "dark"
+        ? theme.colors.dark[7]
+        : theme.colors.gray[0],
+    margin: -theme.spacing.md,
+    marginTop: theme.spacing.sm,
+    padding: `${theme.spacing.md}px ${theme.spacing.md * 2}px`,
+    paddingBottom: theme.spacing.xl,
+    borderTop: `1px solid ${
+      theme.colorScheme === "dark" ? theme.colors.dark[5] : theme.colors.gray[1]
+    }`,
+  },
+
+  hiddenMobile: {
+    [theme.fn.smallerThan("sm")]: {
+      display: "none",
+    },
+  },
+
+  hiddenDesktop: {
+    [theme.fn.largerThan("sm")]: {
+      display: "none",
+    },
+  },
+}));
+
+const mockdata = [
+  {
+    icon: IconCode,
+    title: "Open source",
+    description: "This Pokémon’s cry is very loud and distracting",
+  },
+  {
+    icon: IconCoin,
+    title: "Free for everyone",
+    description: "The fluid of Smeargle’s tail secretions changes",
+  },
+  {
+    icon: IconBook,
+    title: "Documentation",
+    description: "Yanma is capable of seeing 360 degrees without",
+  },
+  {
+    icon: IconFingerprint,
+    title: "Security",
+    description: "The shell’s rounded shape and the grooves on its.",
+  },
+  {
+    icon: IconChartPie3,
+    title: "Analytics",
+    description: "This Pokémon uses its flying ability to quickly chase",
+  },
+  {
+    icon: IconNotification,
+    title: "Notifications",
+    description: "Combusken battles with the intensely hot flames it spews",
+  },
+];
 
 const Navbar = () => {
-  const navigations = [
-    { name: "Home", href: "#", current: false },
-    { name: "Dashboard", href: "#", current: true },
-  ];
+  const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
+    useDisclosure(false);
+  const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
+  const { classes, theme } = useStyles();
 
-  const [navigation, setNavigation] = useState(navigations);
-
-  function classNames(...classes) {
-    return classes.filter(Boolean).join(" ");
-  }
-  const [active, setActive] = useState(false);
-  const handleClick = (item: any, index: number) => {
-    console.log("shit");
-
-    const newNavigations = [...navigation];
-    newNavigations.forEach((navigationa, i) => {
-      navigationa.current = i === index;
-    });
-    setNavigation(newNavigations);
-  };
+  const links = mockdata.map((item) => (
+    <UnstyledButton className={classes.subLink} key={item.title}>
+      <Group noWrap align="flex-start">
+        <ThemeIcon size={34} variant="default" radius="md">
+          <item.icon size={22} color={theme.fn.primaryColor()} />
+        </ThemeIcon>
+        <div>
+          <Text size="sm" weight={500}>
+            {item.title}
+          </Text>
+          <Text size="xs" color="dimmed">
+            {item.description}
+          </Text>
+        </div>
+      </Group>
+    </UnstyledButton>
+  ));
 
   return (
-    <Disclosure as="nav" className="bg-white shadow-lg">
-      {({ open }) => (
-        <>
-          <div className="mx-auto container px-2 sm:px-6 lg:px-8">
-            <div className="relative flex h-16 items-center justify-between">
-              <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-                {/* Mobile menu button*/}
-                <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-                  <span className="sr-only">Open main menu</span>
-                  {open ? (
-                    <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
-                  ) : (
-                    <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
-                  )}
-                </Disclosure.Button>
-              </div>
-              <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-                <div className="flex flex-shrink-0 items-center">
-                  <img
-                    className="block h-8 w-auto lg:hidden"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                    alt="Your Company"
-                  />
-                  <img
-                    className="hidden h-8 w-auto lg:block"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                    alt="Your Company"
-                  />
-                </div>
-                <div className="hidden sm:ml-6 sm:block">
-                  <div className="flex space-x-4">
-                    {navigation.map((item, index) => (
-                      <a
-                        onClick={() => handleClick(item, index)}
-                        key={item.name}
-                        href={item.href}
-                        className={classNames(
-                          item.current
-                            ? "bg-gray-300 text-gray-600"
-                            : "text-gray-600 hover:bg-gray-300 hover:text-white",
-                          "px-3 py-2 rounded-md text-sm font-medium duration-300"
-                        )}
-                        aria-current={item.current ? "page" : undefined}
-                      >
-                        {item.name}
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              </div>
-              <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                <button
-                  type="button"
-                  className="rounded-full bg-gray-300 duration-300 hover:bg-gray-400 p-1 text-gray-400 hover:text-white"
-                >
-                  <span className="sr-only">View notifications</span>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-6 h-6"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349m-16.5 11.65V9.35m0 0a3.001 3.001 0 003.75-.615A2.993 2.993 0 009.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 002.25 1.016c.896 0 1.7-.393 2.25-1.016a3.001 3.001 0 003.75.614m-16.5 0a3.004 3.004 0 01-.621-4.72L4.318 3.44A1.5 1.5 0 015.378 3h13.243a1.5 1.5 0 011.06.44l1.19 1.189a3 3 0 01-.621 4.72m-13.5 8.65h3.75a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75H6.75a.75.75 0 00-.75.75v3.75c0 .415.336.75.75.75z"
+    <Box>
+      <Header height={60} px="md">
+        <Group position="apart" sx={{ height: "100%" }}>
+          <p>Logo</p>
+          <Group
+            sx={{ height: "100%" }}
+            spacing={0}
+            className={classes.hiddenMobile}
+          >
+            <Link href="/" className={classes.link}>
+              Home
+            </Link>
+            <HoverCard
+              width={600}
+              position="bottom"
+              radius="md"
+              shadow="md"
+              withinPortal
+            >
+              {/* <HoverCard.Target>
+                <a href="#" className={classes.link}>
+                  <Center inline>
+                    <Box component="span" mr={5}>
+                      Features
+                    </Box>
+                    <IconChevronDown
+                      size={16}
+                      color={theme.fn.primaryColor()}
                     />
-                  </svg>
-                </button>
+                  </Center>
+                </a>
+              </HoverCard.Target> */}
 
-                {/* Profile dropdown */}
-                <Menu as="div" className="relative ml-3">
-                  <div>
-                    <Menu.Button className="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                      <span className="sr-only">Open user menu</span>
-                      <img
-                        className="h-8 w-8 rounded-full"
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                        alt=""
-                      />
-                    </Menu.Button>
-                  </div>
-                  <Transition
-                    as={Fragment}
-                    enter="transition ease-out duration-100"
-                    enterFrom="transform opacity-0 scale-95"
-                    enterTo="transform opacity-100 scale-100"
-                    leave="transition ease-in duration-75"
-                    leaveFrom="transform opacity-100 scale-100"
-                    leaveTo="transform opacity-0 scale-95"
-                  >
-                    <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href="#"
-                            className={classNames(
-                              active ? "bg-gray-100" : "",
-                              "block px-4 py-2 text-sm text-gray-700"
-                            )}
-                          >
-                            Your Profile
-                          </a>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href="#"
-                            className={classNames(
-                              active ? "bg-gray-100" : "",
-                              "block px-4 py-2 text-sm text-gray-700"
-                            )}
-                          >
-                            Settings
-                          </a>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href="#"
-                            className={classNames(
-                              active ? "bg-gray-100" : "",
-                              "block px-4 py-2 text-sm text-gray-700"
-                            )}
-                          >
-                            Sign out
-                          </a>
-                        )}
-                      </Menu.Item>
-                    </Menu.Items>
-                  </Transition>
-                </Menu>
-              </div>
-            </div>
-          </div>
+              <HoverCard.Dropdown sx={{ overflow: "hidden" }}>
+                <Group position="apart" px="md">
+                  <Text weight={500}>Features</Text>
+                  <Anchor href="#" size="xs">
+                    View all
+                  </Anchor>
+                </Group>
 
-          <Disclosure.Panel className="sm:hidden">
-            <div className="space-y-1 px-2 pt-2 pb-3">
-              {navigation.map((item, index) => (
-                <Disclosure.Button
-                  onClick={() => handleClick(item, index)}
-                  key={item.name}
-                  as="a"
-                  href={item.href}
-                  className={classNames(
-                    item.current
-                      ? "bg-gray-300 text-gray-600"
-                      : "text-gray-600 hover:bg-gray-300 hover:text-white",
-                    "block px-3 py-2 rounded-md text-base font-medium duration-300"
-                  )}
-                  aria-current={item.current ? "page" : undefined}
-                >
-                  {item.name}
-                </Disclosure.Button>
-              ))}
-            </div>
-          </Disclosure.Panel>
-        </>
-      )}
-    </Disclosure>
+                <Divider
+                  my="sm"
+                  mx="-md"
+                  color={theme.colorScheme === "dark" ? "dark.5" : "gray.1"}
+                />
+
+                <SimpleGrid cols={2} spacing={0}>
+                  {links}
+                </SimpleGrid>
+
+                <div className={classes.dropdownFooter}>
+                  <Group position="apart">
+                    <div>
+                      <Text weight={500} size="sm">
+                        Get started
+                      </Text>
+                      <Text size="xs" color="dimmed">
+                        Their food sources have decreased, and their numbers
+                      </Text>
+                    </div>
+                    <Button variant="default">Get started</Button>
+                  </Group>
+                </div>
+              </HoverCard.Dropdown>
+            </HoverCard>
+            <Link href="/u/123" className={classes.link}>
+              profile
+            </Link>
+            <Link href="#" className={classes.link}>
+              Academy
+            </Link>
+          </Group>
+
+          <Group className={classes.hiddenMobile}>
+            <Button variant="default">Log in</Button>
+            <Button>Sign up</Button>
+          </Group>
+
+          <Burger
+            opened={drawerOpened}
+            onClick={toggleDrawer}
+            className={classes.hiddenDesktop}
+          />
+        </Group>
+      </Header>
+
+      <Drawer
+        opened={drawerOpened}
+        onClose={closeDrawer}
+        size="100%"
+        padding="md"
+        title="Navigation"
+        className={classes.hiddenDesktop}
+        zIndex={1000000}
+      >
+        <ScrollArea sx={{ height: "calc(100vh - 60px)" }} mx="-md">
+          <Divider
+            my="sm"
+            color={theme.colorScheme === "dark" ? "dark.5" : "gray.1"}
+          />
+
+          <a href="#" className={classes.link}>
+            Home
+          </a>
+          <UnstyledButton className={classes.link} onClick={toggleLinks}>
+            <Center inline>
+              <Box component="span" mr={5}>
+                Features
+              </Box>
+              <IconChevronDown size={16} color={theme.fn.primaryColor()} />
+            </Center>
+          </UnstyledButton>
+          <Collapse in={linksOpened}>{links}</Collapse>
+          <a href="#" className={classes.link}>
+            Learn
+          </a>
+          <a href="#" className={classes.link}>
+            Academy
+          </a>
+
+          <Divider
+            my="sm"
+            color={theme.colorScheme === "dark" ? "dark.5" : "gray.1"}
+          />
+
+          <Group position="center" grow pb="xl" px="md">
+            <Button variant="default">Log in</Button>
+            <Button>Sign up</Button>
+          </Group>
+        </ScrollArea>
+      </Drawer>
+    </Box>
   );
 };
 
