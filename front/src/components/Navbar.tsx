@@ -33,6 +33,7 @@ import {
 import { useState } from "react";
 import SignUpModal from "@/modals/SignUpModal";
 import Link from "next/link";
+import LoginModal from "@/modals/loginModal";
 const useStyles = createStyles((theme) => ({
   link: {
     display: "flex",
@@ -140,6 +141,8 @@ const Navbar = () => {
     useDisclosure(false);
   const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
   const { classes, theme } = useStyles();
+  const [showSignupModal, setShowSignupModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false)
 
   const links = mockdata.map((item) => (
     <UnstyledButton className={classes.subLink} key={item.title}>
@@ -179,20 +182,6 @@ const Navbar = () => {
               shadow="md"
               withinPortal
             >
-              {/* <HoverCard.Target>
-                <a href="#" className={classes.link}>
-                  <Center inline>
-                    <Box component="span" mr={5}>
-                      Features
-                    </Box>
-                    <IconChevronDown
-                      size={16}
-                      color={theme.fn.primaryColor()}
-                    />
-                  </Center>
-                </a>
-              </HoverCard.Target> */}
-
               <HoverCard.Dropdown sx={{ overflow: "hidden" }}>
                 <Group position="apart" px="md">
                   <Text weight={500}>Features</Text>
@@ -235,8 +224,8 @@ const Navbar = () => {
           </Group>
 
           <Group className={classes.hiddenMobile}>
-            <Button variant="default">Log in</Button>
-            <Button>Sign up</Button>
+            <Button onClick={() => {setShowLoginModal(true)}} variant="default">Log in</Button>
+            <Button onClick={() => {setShowSignupModal(true);console.log(showSignupModal)}} >Sign up</Button>
           </Group>
 
           <Burger
@@ -274,24 +263,26 @@ const Navbar = () => {
             </Center>
           </UnstyledButton>
           <Collapse in={linksOpened}>{links}</Collapse>
-          <a href="#" className={classes.link}>
-            Learn
-          </a>
-          <a href="#" className={classes.link}>
+          <Link href="/u/123" className={classes.link}>
+            profile
+          </Link>
+          <Link href="#" className={classes.link}>
             Academy
-          </a>
-
+          </Link>
           <Divider
             my="sm"
             color={theme.colorScheme === "dark" ? "dark.5" : "gray.1"}
           />
-
           <Group position="center" grow pb="xl" px="md">
-            <Button variant="default">Log in</Button>
-            <Button>Sign up</Button>
+            <Button variant="default" onClick={() => {setShowLoginModal(true)}}>Log in</Button>
+            <Button onClick={() => {console.log("alo")}}>Sign up</Button>
           </Group>
         </ScrollArea>
       </Drawer>
+      <div>
+        {showSignupModal && <SignUpModal showSignupModal={showSignupModal} setShowSignupModal={setShowSignupModal}/>}
+        {showLoginModal && <LoginModal showLoginModal={showLoginModal} setShowLoginModal={setShowLoginModal}/>}
+      </div>
     </Box>
   );
 };
