@@ -19,6 +19,8 @@ import {
   Button,
 } from "@mantine/core";
 
+
+
 const SignUpModal = ({
   showSignupModal,
   setShowSignupModal,
@@ -27,6 +29,40 @@ const SignUpModal = ({
   setShowSignupModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const theme = useMantineTheme();
+  const [firstName, setFirstName] = React.useState("");
+  const [lastName, setLastName] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [confirmPassword, setConfirmPassword] = React.useState("");
+  const [terms, setTerms] = React.useState(false);
+  const [privacy, setPrivacy] = React.useState(false);
+  const [showPassword, setShowPassword] = React.useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
+
+
+  const handleSignup = async () => {
+
+   console.log("handleSignup");
+    const response = await fetch("http://localhost:3000/auth/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        firstName,
+        lastName,
+        email,
+        password,
+      }),
+    });
+    const data = await response.json();
+
+    if (data.error) {
+      console.log(data.error);
+    } else {
+      console.log(data);
+    }
+  };
   return (
     <Modal
       overflow="inside"
@@ -61,31 +97,33 @@ const SignUpModal = ({
         <Paper withBorder shadow="md" p={30} mt={30} radius="md">
           <Grid>
             <Grid.Col span={6}>
-              <TextInput label="First name" placeholder="John" required />
+              <TextInput label="First name" placeholder="John" onChange={(event) => setFirstName(event.target.value)} required />
             </Grid.Col>
             <Grid.Col span={6}>
-              <TextInput label="Last name" placeholder="Doe" required />
+              <TextInput label="Last name" placeholder="Doe" onChange={(event) => setLastName(event.target.value)} required />
             </Grid.Col>
           </Grid>
-          <TextInput mt="md" label="Email" placeholder="you@mantine.dev" required />
+          <TextInput mt="md" label="Email" placeholder="you@mantine.dev" onChange={(event) => setEmail(event.target.value)}required />
           <PasswordInput
             label="Password"
             placeholder="Your password"
             required
             mt="md"
+            onChange={(event) => setPassword(event.target.value)}
           />
           <PasswordInput
             label="Password"
             placeholder="Confirm password"
             required
             mt="md"
+            onChange={(event) => setConfirmPassword(event.target.value)}
           />
           <Group position="apart" mt="lg">
             <Checkbox label="I agree to your terms" sx={{ lineHeight: 1 }} />
             
           </Group>
           
-          <Button fullWidth mt="xl">
+          <Button fullWidth mt="xl" variant="default" color="blue" onClick={() => handleSignup()}>
             Sign up
           </Button>
 

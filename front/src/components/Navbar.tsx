@@ -30,7 +30,7 @@ import {
   IconChevronDown,
 } from "@tabler/icons-react";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SignUpModal from "@/modals/SignUpModal";
 import Link from "next/link";
 import LoginModal from "@/modals/loginModal";
@@ -143,7 +143,31 @@ const Navbar = () => {
   const { classes, theme } = useStyles();
   const [showSignupModal, setShowSignupModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false)
+  const [
+    userData, setUseData
+  ] = useState(null)
 
+  const fetchUser = async () => {
+    console.log("fetching user");
+    const res = await fetch("http://localhost:3000/users/me", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+
+    });
+    const data = await res.json();
+    console.log({data});
+    setUseData(data);
+  };
+  // useEffect(() => {
+
+  //   if (localStorage.getItem("token") || !userData) {
+  //     // setShowLoginModal(true);
+  //     fetchUser();
+  //   } else {
+  //   }
+
+  // }, []);
   const links = mockdata.map((item) => (
     <UnstyledButton className={classes.subLink} key={item.title}>
       <Group noWrap align="flex-start">
@@ -222,11 +246,23 @@ const Navbar = () => {
               Academy
             </Link>
           </Group>
+        {
+          userData ? (
+            <Group className={classes.hiddenMobile}>
+              <Button onClick={() => {setShowLoginModal(true)}} variant="default">Log out</Button>
+            </Group>
+          ) : (
+            <Group className={classes.hiddenMobile}>
+              <Button onClick={() => {setShowLoginModal(true)}} variant="default">Log in</Button>
+              <Button onClick={() => {setShowSignupModal(true);console.log(showSignupModal)}} >Sign up</Button>
+            </Group>
+          )
 
-          <Group className={classes.hiddenMobile}>
+        }
+          {/* <Group className={classes.hiddenMobile}>
             <Button onClick={() => {setShowLoginModal(true)}} variant="default">Log in</Button>
             <Button onClick={() => {setShowSignupModal(true);console.log(showSignupModal)}} >Sign up</Button>
-          </Group>
+          </Group> */}
 
           <Burger
             opened={drawerOpened}
@@ -273,15 +309,30 @@ const Navbar = () => {
             my="sm"
             color={theme.colorScheme === "dark" ? "dark.5" : "gray.1"}
           />
+          {
+            userData ? (
+              <div>
+                <p>{userData.email}</p>
+                </div>
+            ) : (
           <Group position="center" grow pb="xl" px="md">
-            <Button variant="default" onClick={() => {setShowLoginModal(true)}}>Log in</Button>
+            <Button variant="default" onClick={() => {setShowLoginModal(true)}}>llLog in</Button>
             <Button onClick={() => {console.log("alo")}}>Sign up</Button>
           </Group>
+            )
+          }
         </ScrollArea>
       </Drawer>
       <div>
         {showSignupModal && <SignUpModal showSignupModal={showSignupModal} setShowSignupModal={setShowSignupModal}/>}
-        {showLoginModal && <LoginModal showLoginModal={showLoginModal} setShowLoginModal={setShowLoginModal}/>}
+        {showLoginModal && <LoginModal 
+        onSuccess={
+          () => {
+            fetchUser()
+            setShowLoginModal(false)
+          }
+        }
+        showLoginModal={showLoginModal} setShowLoginModal={setShowLoginModal}/>}
       </div>
     </Box>
   );
