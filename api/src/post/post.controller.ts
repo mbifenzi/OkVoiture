@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Req } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreatePostDto, UpdatePostDto } from './dto';
 import { PostService } from './post.service';
@@ -19,9 +19,8 @@ export class PostController {
     }
 
     @Post()
-
-    async create(@Body() createPostDto: CreatePostDto, @getMe() user: AuthDto) {
-        return  this.PostService.create(createPostDto, user);
+    async create(@Body() createPostDto: CreatePostDto, @Req() req: AuthDto) {
+        return this.PostService.create(createPostDto, req);
     }
 
     @Put(':id')
