@@ -1,45 +1,36 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreatePostDto, UpdatePostDto } from './dto';
+import { PostService } from './post.service';
+import { AuthDto } from 'src/auth/dto/auth.dto';
 
 @Controller('post')
 export class PostController {
-    constructor(private readonly prismService: PrismaService) {
-
-    }
+    constructor(private PostService: PostService) {}
 
     @Get()
     async findAll() {
-        return this.prismService.post.findMany();
+        return this.PostService.findAll();
     }
 
     @Get(':id')
     async findOne(@Param('id') id: string) {
-        return this.prismService.post.findUnique({
-            where: { id: Number(id) },
-        });
+        return this.PostService.findOne(parseInt(id));
     }
 
     @Post()
-    async create(@Body() createPostDto: CreatePostDto) {
-        return this.prismService.post.create({
-            data: createPostDto,
-        });
+
+    async create(@Body() createPostDto: CreatePostDto, @getMe() user: AuthDto) {
+        return  this.PostService.create(createPostDto, user);
     }
 
     @Put(':id')
     async update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-        return this.prismService.post.update({
-            where: { id: Number(id) },
-            data: updatePostDto,
-        });
+        return this.PostService.update(parseInt(id), updatePostDto);
     }
 
     @Delete(':id')
     async remove(@Param('id') id: string) {
-        return this.prismService.post.delete({
-            where: { id: Number(id) },
-        });
+        return this.PostService.remove(parseInt(id));
     }
-    
 }

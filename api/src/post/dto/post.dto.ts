@@ -1,6 +1,7 @@
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsEmail, isNotEmpty, IsNotEmpty, IsNumber, isNumber, isString, IsString } from 'class-validator';
 
 export class CreatePostDto {
+
     @IsNotEmpty()
     @IsString()
     title: string;
@@ -8,10 +9,8 @@ export class CreatePostDto {
     @IsNotEmpty()
     @IsString()
     content: string;
-
-    @IsNotEmpty()
-    @IsEmail()
-    authorEmail: string;
+    published: boolean;
+    authorId: string;
 }
 
 export class UpdatePostDto {

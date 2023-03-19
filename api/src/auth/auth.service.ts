@@ -27,7 +27,7 @@ export class AuthService {
       throw new ForbiddenException('Invalid password');
     }
     delete user.hash;
-    return this.createToken(user.id, user.email);
+    return this.createToken(parseInt(user.id), user.email);
   }
 
   async signup(dto: AuthDto) {
@@ -40,7 +40,7 @@ export class AuthService {
         },
       });
       delete user.hash;
-      return this.createToken(user.id, user.email);
+      return this.createToken(parseInt(user.id), user.email);
     } catch (e) {
       console.log(e);
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
