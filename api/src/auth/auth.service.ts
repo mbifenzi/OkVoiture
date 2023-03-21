@@ -26,7 +26,7 @@ export class AuthService {
     if (!valid) {
       throw new ForbiddenException('Invalid password');
     }
-    delete user.hash;
+    // delete user.hash;
     return this.createToken(parseInt(user.id), user.email);
   }
 
@@ -39,7 +39,7 @@ export class AuthService {
           hash,
         },
       });
-      delete user.hash;
+      // delete user.hash;
       return this.createToken(parseInt(user.id), user.email);
     } catch (e) {
       console.log(e);
@@ -72,7 +72,7 @@ export class AuthService {
   }
 
   async logout(userID: number) {
-    return null
+    return null;
     // return this.prisma.user.update({
     //   where: {
     //     id: userID,

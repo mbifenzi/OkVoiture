@@ -1,7 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Body, Injectable } from '@nestjs/common';
 import { CreatePostDto, UpdatePostDto } from './dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AuthDto } from 'src/auth/dto';
+import { UserDto } from 'src/user/dto/user.dto';
+import { GetUser } from 'src/auth/getUser.decorator';
 
 @Injectable()
 export class PostService {
@@ -17,16 +19,10 @@ export class PostService {
     });
   }
 
-  create(createPostDto: CreatePostDto, user: UserDto) {
+  create(createPostDto: CreatePostDto, User: UserDto) {
+    createPostDto.authorId = User.id;
     return this.prismService.post.create({
-      data: {
-        ...createPostDto,
-        author: {
-          connect: {
-            id: user.id,
-          },
-        },
-      },
+      data: createPostDto,
     });
   }
 
