@@ -6,25 +6,23 @@ import {
   Param,
   Post,
   Put,
-  Req,
   UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { User } from '@prisma/client';
 import { GetUser } from 'src/auth/getUser.decorator';
 import { JwtGuard } from 'src/auth/guard';
-import { UserDto } from 'src/user/dto/user.dto';
-
 import { CreatePostDto, UpdatePostDto } from './dto';
 import { PostService } from './post.service';
 
-@Controller('post')
 @UseGuards(JwtGuard)
+@Controller('post')
 export class PostController {
   constructor(private PostService: PostService) {}
 
   @Get()
-  async findAll(@GetUser('id') userId: string) {
-    return this.PostService.findAll();
+  async findAll(@GetUser() user: User) {
+    const userId = user.id;
+    return this.PostService.findAll(userId);
   }
 
   @Get(':id')
@@ -33,8 +31,10 @@ export class PostController {
   }
 
   @Post()
-  async create(@Body() createPostDto: CreatePostDto, @GetUser() user: UserDto) {
-    return this.PostService.create(createPostDto, user);
+  async create(@Body() dto: CreatePostDto, @GetUser() user: User) {
+    const userId = user.id;
+    // console.log(user);
+    return this.PostService.create(dto, userId);
   }
 
   @Put(':id')

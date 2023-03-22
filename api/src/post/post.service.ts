@@ -5,37 +5,46 @@ import { AuthDto } from 'src/auth/dto';
 import { UserDto } from 'src/user/dto/user.dto';
 import { GetUser } from 'src/auth/getUser.decorator';
 
-@Injectable()
+@Injectable({})
 export class PostService {
   constructor(private prismService: PrismaService) {}
 
-  findAll() {
-    return this.prismService.post.findMany();
+  findAll(userId: number) {
+    return this.prismService.post.findMany({
+      where: { authorId: userId },
+    });
   }
 
   findOne(id: number) {
     return this.prismService.post.findUnique({
-      where: { id: String(id) },
+      where: { id: id },
     });
   }
 
-  create(createPostDto: CreatePostDto, User: UserDto) {
-    createPostDto.authorId = User.id;
-    return this.prismService.post.create({
-      data: createPostDto,
+  create(createPostDto: CreatePostDto, userId: number) {
+    const post = this.prismService.post.create({
+      data: {
+        title: createPostDto.title,
+        content: createPostDto.content,
+        author: {
+          connect: { id: userId },
+        },
+      },
     });
+
+    return post;
   }
 
   update(id: number, updatePostDto: UpdatePostDto) {
     return this.prismService.post.update({
-      where: { id: String(id) },
+      where: { id: id },
       data: updatePostDto,
     });
   }
 
   remove(id: number) {
     return this.prismService.post.delete({
-      where: { id: String(id) },
+      where: { id: id },
     });
   }
 }

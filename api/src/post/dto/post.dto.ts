@@ -7,9 +7,11 @@ export class CreatePostDto {
 
   @IsNotEmpty()
   @IsString()
-  content: string;
-  published: boolean;
-  authorId: string;
+  content?: string;
+
+  @IsNotEmpty()
+  @IsString()
+  link: string;
 }
 
 export class UpdatePostDto {
