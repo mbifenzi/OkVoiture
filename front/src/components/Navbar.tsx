@@ -146,18 +146,27 @@ const Navbar = () => {
   const [
     userData, setUseData
   ] = useState(null)
-
+  const [isLoggedin, setIsLoggedin] = useState(false)
   const fetchUser = async () => {
     console.log("fetching user");
-    const res = await fetch("http://localhost:3000/users/me", {
+    const res = await fetch("http://localhost:3000/auth/me", {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
-
     });
-    const data = await res.json();
-    console.log({data});
-    setUseData(data);
+    try {
+      const data = await res;
+      console.log("HERE DATA");
+      console.log(data);
+      // localStorage.setItem('token', data.token);
+      // localStorage.setItem('user', JSON.stringify(data.user));
+      // console.log({data});
+      // setUseData(data);
+    }
+    catch(e) {
+      console.log(e)
+    }
+  
   };
   // useEffect(() => {
 

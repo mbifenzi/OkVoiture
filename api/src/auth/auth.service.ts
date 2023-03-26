@@ -1,10 +1,11 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable, Req, Res } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AuthDto } from './dto';
 import * as argon from 'argon2';
 import { Prisma } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { Request, Response } from 'express';
 
 @Injectable({})
 export class AuthService {
@@ -13,7 +14,8 @@ export class AuthService {
     private jwt: JwtService,
     private config: ConfigService,
   ) {}
-  async login(dto: AuthDto) {
+  async login(dto: AuthDto, res: Response) {
+    console.log('dto is : ', { dto });
     const user = await this.prisma.user.findUnique({
       where: {
         email: dto.email,
@@ -23,11 +25,16 @@ export class AuthService {
       throw new ForbiddenException('User not found');
     }
     const valid = await argon.verify(user.hash, dto.password);
+
     if (!valid) {
       throw new ForbiddenException('Invalid password');
     }
-    // delete user.hash;
-    return this.createToken(user.id, user.email);
+    const token = await this.createToken(user.id, user.email);
+    res.cookie('jwt', token, {
+      httpOnly: true,
+    });
+
+    return token;
   }
 
   async signup(dto: AuthDto) {
@@ -71,15 +78,11 @@ export class AuthService {
     return { access_token: token };
   }
 
-  async logout(userID: number) {
-    return null;
-    // return this.prisma.user.update({
-    //   where: {
-    //     id: userID,
-    //   },
-    //   data: {
-    //     token: null,
-    //   },
-    // });
+  async getUser(userID: number) {
+    return this.prisma.user.findUnique({
+      where: {
+        id: userID,
+      },
+    });
   }
 }

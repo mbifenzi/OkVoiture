@@ -9,8 +9,10 @@ export class UserController {
   //   constructor() {}
 
   @Get('me')
-  getUser(@Req() req: Request) {
-    return req.user;
+  async getUser(@Req() req: Request) {
+    const cookie = req.cookies['token'];
+    console.log('cookie is : ', { cookie });
+    return cookie;
   }
 
   @Get(':id')

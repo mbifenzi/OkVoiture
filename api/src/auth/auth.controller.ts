@@ -1,10 +1,13 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
+  Options,
   Post,
   Req,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
@@ -13,18 +16,40 @@ import { AuthDto } from './dto';
 import { AuthGuard } from '@nestjs/passport';
 // import { UserDto } from 'src/user/dto/user.dto';
 import { GetUser } from './getUser.decorator';
+import { Request, Response } from 'express';
+import { JwtService } from '@nestjs/jwt';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private JwtService: JwtService,
+  ) {}
 
-  @HttpCode(HttpStatus.OK)
+  // @HttpCode(HttpStatus.OK)
   @Post('login')
-  login(@Body() dto: AuthDto) {
-    // console.log({
-    //   dto,
-    // });
-    return this.authService.login(dto);
+  async login(@Body() dto: AuthDto, @Res({ passthrough: true }) res: Response) {
+    return this.authService.login(dto, res);
+  }
+
+  @Get('me')
+  @UseGuards(AuthGuard('jwt'))
+  async user(@Req() req: Request) {
+    const cookie = req.cookies['jwt'];
+
+    try {
+      const data = await this.JwtService.verifyAsync(cookie, {
+        secret: 'secret',
+      });
+      if (!data) {
+        throw new Error('Invalid token');
+      }
+      console.log('data is : ', { data });
+      const user = await this.authService.getUser(data.sub);
+      return user;
+    } catch (e) {
+      throw new Error('Invalid token');
+    }
   }
 
   @HttpCode(HttpStatus.OK)
@@ -35,8 +60,9 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('logout')
-  async logout(@Req() req) {
-    return this.authService.logout(req);
+  async logout(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie('jwt');
+    return { message: 'success' };
   }
 
   @HttpCode(HttpStatus.OK)
