@@ -30,7 +30,7 @@ export class AuthService {
       throw new ForbiddenException('Invalid password');
     }
     const token = await this.createToken(user.id, user.email);
-    res.cookie('jwt', token, {
+    res.cookie('jwt', token.access_token, {
       httpOnly: true,
     });
 

@@ -8,7 +8,13 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(config: ConfigService, private prisma: PrismaService) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      // get jwt from cookie instead of header
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        (req) => {
+          return req?.cookies?.jwt;
+        },
+      ]),
+      ignoreExpiration: false,
       secretOrKey: config.get('JWT_SECRET'),
     });
   }
@@ -18,6 +24,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     const user = await this.prisma.user.findUnique({
       where: { id: payload.sub },
     });
+
     delete user.hash;
     return user;
   }
