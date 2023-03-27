@@ -1,5 +1,5 @@
 import { Modal, useMantineTheme } from "@mantine/core";
-import React, {useState} from "react";
+import React, {SyntheticEvent, useState} from "react";
 import {
   TextInput,
   PasswordInput,
@@ -29,13 +29,18 @@ const LoginModal = ({
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
-  const handleLogin = async () => {
+  const handleLogin = async (e: SyntheticEvent) => {
+    e.preventDefault();
     console.log("handleLogin");
     try 
     {
       const response = await fetch("http://localhost:3000/auth/login", {
         method: "POST",
+        credentials: "include", 
         headers: {
+          "Access-Control-Allow-Headers" : "Content-Type",
+          "Access-Control-Allow-Origin": "http://localhost:3000",
+          "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
@@ -43,10 +48,13 @@ const LoginModal = ({
           password,
         }),
       });
+
+
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem("token", data.access_token);
         console.log("@@@@@@@@@data");
+        console.log(data);
         onSuccess();
       }
     }
@@ -95,7 +103,7 @@ const LoginModal = ({
             Forgot password?
           </Anchor>
         </Group>
-        <Button fullWidth mt="xl" onClick={() => handleLogin()}>
+        <Button fullWidth mt="xl" onClick={handleLogin}>
           Sign in
         </Button>
       </Paper>
