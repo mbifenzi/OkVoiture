@@ -14,7 +14,13 @@ async function bootstrap() {
     new ValidationPipe({
       whitelist: true,
     }),
-  );
+  );  
+  // set headers to allow cookies 
+  app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3001');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    next();
+  });
   await app.listen(3000);
 }
 bootstrap();

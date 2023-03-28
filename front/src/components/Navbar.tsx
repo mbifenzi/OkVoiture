@@ -150,6 +150,7 @@ const Navbar = () => {
   const fetchUser = async () => {
     console.log("fetching user");
     const res = await fetch("http://localhost:3000/auth/me", {
+      
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },

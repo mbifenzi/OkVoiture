@@ -36,7 +36,8 @@ const LoginModal = ({
     {
       const response = await fetch("http://localhost:3000/auth/login", {
         method: "POST",
-        credentials: "include", 
+        credentials: "include",
+        // mode: "no-cors",
         headers: {
           "Access-Control-Allow-Headers" : "Content-Type",
           "Access-Control-Allow-Origin": "http://localhost:3000",
