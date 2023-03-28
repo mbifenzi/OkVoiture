@@ -6,9 +6,11 @@ import {
   Param,
   Post,
   Put,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import { User } from '@prisma/client';
+import { Response } from 'express';
 import { GetUser } from 'src/auth/getUser.decorator';
 import { JwtGuard } from 'src/auth/guard';
 import { CreatePostDto, UpdatePostDto } from './dto';
@@ -20,9 +22,12 @@ export class PostController {
   constructor(private PostService: PostService) {}
 
   @Get()
-  async findAll(@GetUser() user: User) {
-    const userId = user.id;
-    return this.PostService.findAll(userId);
+  async findAll(
+    @GetUser() user: User,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    // const userId = user.id;
+    return this.PostService.findAll(user, res);
   }
 
   @Get(':id')

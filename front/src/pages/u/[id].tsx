@@ -1,7 +1,7 @@
 import styles from "../page.module.css";
 import "../../app/globals.css";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import userData from "@/context/User.json";
 import {
   createStyles,
@@ -141,6 +141,48 @@ const AnnoucementsCard = ({ annoucementsData }: { annoucementsData: any }) => {
 
 const UserCardImage = () => {
   const { classes, theme } = useStyles();
+  const [userData, setUserData] = useState<any>(null);
+  const [posts, setPosts] = useState<any>(null);
+
+  const fetchPosts = async () => {
+    console.log('poooosts');
+    const res = await fetch("http://localhost:3000/post", {
+      credentials: "include",
+      method: "GET",
+        headers: {
+          "Access-Control-Allow-Headers" : "Content-Type",
+          "Access-Control-Allow-Origin": "http://localhost:3000",
+          "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+          "Content-Type": "application/json",
+        },
+    });
+
+    const data = await res.json();
+    console.log('poooosts');
+    setPosts(data);
+  };
+
+  const fetchUser = async () => {
+    const res = await fetch("http://localhost:3000/auth/me", {
+      credentials: "include",
+      method: "GET",
+        headers: {
+          "Access-Control-Allow-Headers" : "Content-Type",
+          "Access-Control-Allow-Origin": "http://localhost:3000",
+          "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+          "Content-Type": "application/json",
+        },
+    });
+    const data = await res.json();
+    console.log('yaaaa');
+    setUserData(data);
+  };
+
+  useEffect(() => {
+    fetchUser();
+    fetchPosts();
+  }, []);
+
 
   return (
     <main>
@@ -180,13 +222,13 @@ const UserCardImage = () => {
           </Button>
         </Group>
       </Card>
-      <Grid className="mt-4">
-        {userData.posts.map((annoucementsData) => (
+      {/* <Grid className="mt-4">
+        {posts.map((annoucementsData) => (
           <Grid.Col span={4} key={annoucementsData.id}>
             <AnnouncementsMiniCards key={annoucementsData.id} />
           </Grid.Col>
         ))}
-      </Grid>
+      </Grid> */}
     </main>
   );
 };

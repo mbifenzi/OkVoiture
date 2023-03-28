@@ -4,15 +4,19 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { AuthDto } from 'src/auth/dto';
 import { UserDto } from 'src/user/dto/user.dto';
 import { GetUser } from 'src/auth/getUser.decorator';
+import { Response } from 'express';
+import { User } from '@prisma/client';
 
 @Injectable({})
 export class PostService {
   constructor(private prismService: PrismaService) {}
 
-  findAll(userId: number) {
+  async findAll(user: User, res) {
     return this.prismService.post.findMany({
-      where: { authorId: userId },
+      where: { authorId: user.id },
     });
+
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3001');
   }
 
   findOne(id: number) {
