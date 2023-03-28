@@ -33,7 +33,7 @@ export class AuthService {
     res.cookie('jwt', token.access_token, {
       httpOnly: true,
     });
-    // res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3001');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3001');
     console.log('__DBG__TOKEN__ : ', token);
     return token;
   }

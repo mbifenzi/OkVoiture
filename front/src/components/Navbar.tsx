@@ -150,32 +150,31 @@ const Navbar = () => {
   const fetchUser = async () => {
     console.log("fetching user");
     const res = await fetch("http://localhost:3000/auth/me", {
+      credentials: "include",
+      method: "GET",
+        headers: {
+          "Access-Control-Allow-Headers" : "Content-Type",
+          "Access-Control-Allow-Origin": "http://localhost:3000",
+          "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+          "Content-Type": "application/json",
+        },
       
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
     });
     try {
-      const data = await res;
-      console.log("HERE DATA");
+      const data = await res.json();
       console.log(data);
-      // localStorage.setItem('token', data.token);
-      // localStorage.setItem('user', JSON.stringify(data.user));
-      // console.log({data});
-      // setUseData(data);
+      setUseData(data)
+      setIsLoggedin(true)
     }
     catch(e) {
       console.log(e)
     }
   
   };
-  // useEffect(() => {
-
-  //   if (localStorage.getItem("token") || !userData) {
-  //     // setShowLoginModal(true);
-  //     fetchUser();
-  //   } else {
-  //   }
+  
+  useEffect(() => {
+    fetchUser();
+  }, []);
 
   // }, []);
   const links = mockdata.map((item) => (

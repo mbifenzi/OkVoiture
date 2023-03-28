@@ -18,6 +18,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from './getUser.decorator';
 import { Request, Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
+import { JwtGuard } from './guard';
 
 @Controller('auth')
 export class AuthController {
@@ -32,11 +33,11 @@ export class AuthController {
     return this.authService.login(dto, res);
   }
 
+  @HttpCode(HttpStatus.OK)
   @Get('me')
-  @UseGuards(AuthGuard('jwt'))
-  async user(@Req() req: Request) {
+  @UseGuards(JwtGuard)
+  async user(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
     const cookie = req.cookies['jwt'];
-
     try {
       const data = await this.JwtService.verifyAsync(cookie, {
         secret: 'secret',
@@ -44,8 +45,10 @@ export class AuthController {
       if (!data) {
         throw new Error('Invalid token');
       }
+
       console.log('data is : ', { data });
       const user = await this.authService.getUser(data.sub);
+      res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3001');
       return user;
     } catch (e) {
       throw new Error('Invalid token');
