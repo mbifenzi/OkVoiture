@@ -28,8 +28,16 @@ model Post {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   published Boolean  @default(true)
-  title     String
-  content   String?
+  car_name       String
+  car_model      String
+  car_year       String
+  car_color      String
+  car_price      String
+  car_description String
+  car_image      String[]
+  created_at     DateTime     @default(now())
+  updated_at     DateTime     @updatedAt
+  reserved_at    DateTime[]
   author    User?    @relation(fields: [authorId], references: [id])
   authorId  Int?
 

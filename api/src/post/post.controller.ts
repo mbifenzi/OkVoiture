@@ -16,11 +16,16 @@ import { JwtGuard } from 'src/auth/guard';
 import { CreatePostDto, UpdatePostDto } from './dto';
 import { PostService } from './post.service';
 
-@UseGuards(JwtGuard)
 @Controller('post')
 export class PostController {
   constructor(private PostService: PostService) {}
 
+  @Get('all')
+  async findAllPosts(@Res({ passthrough: true }) res: Response) {
+    return this.PostService.findAllPosts(res);
+  }
+
+  @UseGuards(JwtGuard)
   @Get()
   async findAll(
     @GetUser() user: User,
@@ -31,11 +36,13 @@ export class PostController {
     return this.PostService.findAll(user, res);
   }
 
+  @UseGuards(JwtGuard)
   @Get(':id')
   async findOne(@GetUser('id') userId: string, @Param('id') id: string) {
     return this.PostService.findOne(parseInt(id));
   }
 
+  @UseGuards(JwtGuard)
   @Post()
   async create(@Body() dto: CreatePostDto, @GetUser() user: User) {
     const userId = user.id;
@@ -43,11 +50,13 @@ export class PostController {
     return this.PostService.create(dto, userId);
   }
 
+  @UseGuards(JwtGuard)
   @Put(':id')
   async update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
     return this.PostService.update(parseInt(id), updatePostDto);
   }
 
+  @UseGuards(JwtGuard)
   @Delete(':id')
   async remove(@Param('id') id: string) {
     return this.PostService.remove(parseInt(id));

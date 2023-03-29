@@ -25,6 +25,7 @@ import {
   IconUsers,
 } from "@tabler/icons";
 import { AnnouncementsMiniCards } from "@/components/AnnouncementsMiniCards";
+import { TPost } from "@/global/types";
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -142,7 +143,7 @@ const AnnoucementsCard = ({ annoucementsData }: { annoucementsData: any }) => {
 const UserCardImage = () => {
   const { classes, theme } = useStyles();
   const [userData, setUserData] = useState<any>(null);
-  const [posts, setPosts] = useState<any>(null);
+  const [posts, setPosts] = useState<TPost[]>(null);
 
   const fetchPosts = async () => {
     console.log('poooosts');
@@ -223,7 +224,7 @@ const UserCardImage = () => {
         </Group>
       </Card>
       <Grid className="mt-4">
-        {posts.map((annoucementsData) => (
+        {posts?.map((annoucementsData) => (
           <Grid.Col span={4} key={annoucementsData.id}>
             <AnnouncementsMiniCards key={annoucementsData.id} />
           </Grid.Col>

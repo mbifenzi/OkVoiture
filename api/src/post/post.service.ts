@@ -11,8 +11,14 @@ import { User } from '@prisma/client';
 export class PostService {
   constructor(private prismService: PrismaService) {}
 
-  async findAll(user: User, res) {
-    const posts = await this.prismService.post.findMany({
+  findAllPosts(res: Response) {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3001');
+    return this.prismService.post.findMany();
+
+  }
+
+  findAll(user: User, res: Response) {
+    const posts = this.prismService.post.findMany({
       where: { authorId: user.id },
     });
 
@@ -29,14 +35,18 @@ export class PostService {
   create(createPostDto: CreatePostDto, userId: number) {
     const post = this.prismService.post.create({
       data: {
-        title: createPostDto.title,
-        content: createPostDto.content,
+        car_name: createPostDto.title,
+        car_model: createPostDto.car_model,
+        car_year: createPostDto.car_year,
+        car_color: createPostDto.car_color,
+        car_price: createPostDto.car_price,
+        car_description: createPostDto.car_description,
+        car_image: createPostDto.car_image,
         author: {
           connect: { id: userId },
         },
       },
     });
-
     return post;
   }
 

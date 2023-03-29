@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { use, useEffect } from "react";
 import { NativeSelect, Input, Modal, Group, Button } from "@mantine/core";
 import { BiSearchAlt } from "react-icons/bi";
 import { AiOutlineHeart } from "react-icons/ai";
@@ -130,6 +130,36 @@ const CarListItem = ({
 
 const CarList = () => {
   const [showModal, setShowModal] = React.useState(false);
+  const [posts, setPosts] = React.useState([]);
+
+
+  const fetchPosts = async () => {
+    const res = await fetch("http://localhost:3000/post/all", {
+      credentials: "include",
+      method: "GET",
+        headers: {
+          "Access-Control-Allow-Headers" : "Content-Type",
+          "Access-Control-Allow-Origin": "http://localhost:3000",
+          "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+          "Content-Type": "application/json",
+        },
+    });
+    const data = await res.json();
+    console.log(data);
+    return data;
+  };
+
+  // const { data, error } = useSWR("/api/posts", async (url) => {
+  //   const res = await fetch(url);
+  //   const data = await res.json();
+  //   return data;
+  // });
+
+  useEffect(() => {
+    fetchPosts();
+  }, []);
+
+
   return (
     <div className="w-full flex flex-col gap-6">
       <SearchBar />
