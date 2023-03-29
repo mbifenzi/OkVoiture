@@ -12,11 +12,12 @@ export class PostService {
   constructor(private prismService: PrismaService) {}
 
   async findAll(user: User, res) {
-    return this.prismService.post.findMany({
+    const posts = await this.prismService.post.findMany({
       where: { authorId: user.id },
     });
 
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3001');
+    return posts;
   }
 
   findOne(id: number) {

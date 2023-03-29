@@ -158,7 +158,7 @@ const UserCardImage = () => {
     });
 
     const data = await res.json();
-    console.log('poooosts');
+    console.log('poooosts', data);
     setPosts(data);
   };
 
@@ -222,13 +222,13 @@ const UserCardImage = () => {
           </Button>
         </Group>
       </Card>
-      {/* <Grid className="mt-4">
+      <Grid className="mt-4">
         {posts.map((annoucementsData) => (
           <Grid.Col span={4} key={annoucementsData.id}>
             <AnnouncementsMiniCards key={annoucementsData.id} />
           </Grid.Col>
         ))}
-      </Grid> */}
+      </Grid>
     </main>
   );
 };

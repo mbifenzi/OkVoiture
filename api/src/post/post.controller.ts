@@ -27,6 +27,7 @@ export class PostController {
     @Res({ passthrough: true }) res: Response,
   ) {
     // const userId = user.id;
+    console.log(user);
     return this.PostService.findAll(user, res);
   }
 
