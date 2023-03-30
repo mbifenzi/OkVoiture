@@ -14,7 +14,6 @@ export class PostService {
   findAllPosts(res: Response) {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3001');
     return this.prismService.post.findMany();
-
   }
 
   findAll(user: User, res: Response) {
@@ -32,8 +31,9 @@ export class PostService {
     });
   }
 
-  create(createPostDto: CreatePostDto, userId: number) {
-    const post = this.prismService.post.create({
+  async create(createPostDto: CreatePostDto, userId: number, res: Response) {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3001');
+    const post = await this.prismService.post.create({
       data: {
         car_name: createPostDto.title,
         car_model: createPostDto.car_model,

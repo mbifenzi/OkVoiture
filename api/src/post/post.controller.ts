@@ -44,10 +44,14 @@ export class PostController {
 
   @UseGuards(JwtGuard)
   @Post()
-  async create(@Body() dto: CreatePostDto, @GetUser() user: User) {
+  async create(
+    @Body() dto: CreatePostDto,
+    @GetUser() user: User,
+    @Res({ passthrough: true }) res: Response,
+  ) {
     const userId = user.id;
     // console.log(user);
-    return this.PostService.create(dto, userId);
+    return this.PostService.create(dto, userId, res);
   }
 
   @UseGuards(JwtGuard)

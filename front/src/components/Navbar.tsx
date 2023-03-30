@@ -34,6 +34,7 @@ import { useState, useEffect } from "react";
 import SignUpModal from "@/modals/SignUpModal";
 import Link from "next/link";
 import LoginModal from "@/modals/loginModal";
+import PostModal from "@/modals/PostModal";
 const useStyles = createStyles((theme) => ({
   link: {
     display: "flex",
@@ -142,24 +143,26 @@ const Navbar = () => {
   const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
   const { classes, theme } = useStyles();
   const [showSignupModal, setShowSignupModal] = useState(false);
-  const [showLoginModal, setShowLoginModal] = useState(false)
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showPostModal, setShowPostModal] = useState(false);
   const [
     userData, setUseData
   ] = useState(null)
   const [isLoggedin, setIsLoggedin] = useState(false)
+
   const fetchUser = async () => {
     console.log("fetching user");
     const res = await fetch("http://localhost:3000/auth/me", {
       credentials: "include",
       method: "GET",
-        headers: {
-          "Access-Control-Allow-Headers" : "Content-Type",
-          "Access-Control-Allow-Origin": "http://localhost:3000",
-          "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
-          "Content-Type": "application/json",
-        },
-      
+      headers: {
+        "Access-Control-Allow-Headers" : "Content-Type",
+        "Access-Control-Allow-Origin": "http://localhost:3000",
+        "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+        "Content-Type": "application/json",
+      },
     });
+      
     try {
       const data = await res.json();
       console.log(data);
@@ -171,7 +174,6 @@ const Navbar = () => {
     }
   
   };
-  
   useEffect(() => {
     fetchUser();
   }, []);
@@ -258,6 +260,7 @@ const Navbar = () => {
         {
           userData ? (
             <Group className={classes.hiddenMobile}>
+              <Button onClick={() => {setShowPostModal(true);console.log('test')}} variant="default">Create Post</Button>
               <Button onClick={() => {setShowLoginModal(true)}} variant="default">Log out</Button>
             </Group>
           ) : (
@@ -342,6 +345,8 @@ const Navbar = () => {
           }
         }
         showLoginModal={showLoginModal} setShowLoginModal={setShowLoginModal}/>}
+        {showPostModal && <PostModal showPostModal={showPostModal} setShowPostModal={setShowPostModal}/>}
+        
       </div>
     </Box>
   );
