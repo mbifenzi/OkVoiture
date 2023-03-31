@@ -25,8 +25,8 @@ export class CreatePostDto {
   @IsString()
   car_description: string;
 
-  @IsNotEmpty()
-  @IsString()
+  // @IsNotEmpty()
+  // @IsString()
   car_image: string;
 
   @IsNotEmpty()

@@ -2,6 +2,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as cookieParser from 'cookie-parser';
+import { MulterModule } from '@nestjs/platform-express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
@@ -16,6 +17,11 @@ async function bootstrap() {
     }),
   );
   // set headers to allow cookies
+  MulterModule.registerAsync({
+    useFactory: () => ({
+      dest: './upload',
+    }),
+  });
 
   await app.listen(3000);
 }

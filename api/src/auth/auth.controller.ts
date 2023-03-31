@@ -1,14 +1,19 @@
 import {
   Body,
   Controller,
+  FileTypeValidator,
   Get,
   HttpCode,
   HttpStatus,
+  MaxFileSizeValidator,
   Options,
+  ParseFilePipe,
   Post,
   Req,
   Res,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto';
@@ -19,6 +24,8 @@ import { GetUser } from './getUser.decorator';
 import { Request, Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { JwtGuard } from './guard';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Express } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -71,8 +78,24 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post('test')
   @UseGuards(AuthGuard('jwt'))
-  async test(@GetUser() user) {
-    console.log('user is : ', { user });
+  @UseInterceptors(
+    FileInterceptor('car_image', {
+      dest: './uploads/',
+    }),
+  )
+  async test(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: 1000000 }),
+          new FileTypeValidator({ fileType: 'image/jpeg' }),
+        ],
+      }),
+    )
+    file: Express.Multer.File,
+    @Body() dto: AuthDto,
+  ) {
+    console.log('file is : ', file);
     // return user;
   }
 }

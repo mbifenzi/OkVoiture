@@ -2,13 +2,19 @@ import {
   Body,
   Controller,
   Delete,
+  FileTypeValidator,
   Get,
+  MaxFileSizeValidator,
   Param,
+  ParseFilePipe,
   Post,
   Put,
   Res,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { User } from '@prisma/client';
 import { Response } from 'express';
 import { GetUser } from 'src/auth/getUser.decorator';
@@ -44,14 +50,24 @@ export class PostController {
 
   @UseGuards(JwtGuard)
   @Post()
+  @UseInterceptors(FileInterceptor('car_image', { dest: './uploads' }))
   async create(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: 1000000 }),
+          new FileTypeValidator({ fileType: 'image/jpeg' }),
+        ],
+      }),
+    )
+    file: Express.Multer.File,
     @Body() dto: CreatePostDto,
     @GetUser() user: User,
     @Res({ passthrough: true }) res: Response,
   ) {
     const userId = user.id;
-    // console.log(user);
-    return this.PostService.create(dto, userId, res);
+    console.log('file is : ', file);
+    return this.PostService.create(dto, userId, res, file);
   }
 
   @UseGuards(JwtGuard)

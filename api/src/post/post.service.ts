@@ -6,6 +6,7 @@ import { UserDto } from 'src/user/dto/user.dto';
 import { GetUser } from 'src/auth/getUser.decorator';
 import { Response } from 'express';
 import { User } from '@prisma/client';
+import * as fs from 'fs';
 
 @Injectable({})
 export class PostService {
@@ -31,8 +32,17 @@ export class PostService {
     });
   }
 
-  async create(createPostDto: CreatePostDto, userId: number, res: Response) {
+  async create(
+    createPostDto: CreatePostDto,
+    userId: number,
+    res: Response,
+    file: Express.Multer.File,
+  ) {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3001');
+    const userFolderPath = `./uploads/${userId}`;
+    if (!fs.existsSync(userFolderPath)) {
+      fs.mkdirSync(userFolderPath);
+    }
     const post = await this.prismService.post.create({
       data: {
         car_name: createPostDto.title,
@@ -41,13 +51,32 @@ export class PostService {
         car_color: createPostDto.car_color,
         car_price: createPostDto.car_price,
         car_description: createPostDto.car_description,
-        car_image: createPostDto.car_image,
         author: {
           connect: { id: userId },
         },
       },
     });
-    return post;
+    const postId = post.id;
+    const postFolderPath = `${userFolderPath}/${postId}`;
+
+    // create the post folder if it doesn't exist
+    if (!fs.existsSync(postFolderPath)) {
+      fs.mkdirSync(postFolderPath);
+    }
+
+    const imagePath = `${postFolderPath}/${file.filename}`;
+
+    fs.renameSync(file.path, imagePath);
+
+    const updatedPost = await this.prismService.post.update({
+      where: {
+        id: postId,
+      },
+      data: {
+        car_image: imagePath,
+      },
+    });
+    return updatedPost;
   }
 
   update(id: number, updatePostDto: UpdatePostDto) {
