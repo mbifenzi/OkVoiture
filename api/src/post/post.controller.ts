@@ -16,7 +16,7 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { User } from '@prisma/client';
-import { Response } from 'express';
+import { Response as expressResponse } from 'express';
 import { GetUser } from 'src/auth/getUser.decorator';
 import { JwtGuard } from 'src/auth/guard';
 import { CreatePostDto, UpdatePostDto } from './dto';
@@ -27,7 +27,7 @@ export class PostController {
   constructor(private PostService: PostService) {}
 
   @Get('all')
-  async findAllPosts(@Res({ passthrough: true }) res: Response) {
+  async findAllPosts(@Res({ passthrough: true }) res: expressResponse) {
     return this.PostService.findAllPosts(res);
   }
 
@@ -35,7 +35,7 @@ export class PostController {
   @Get()
   async findAll(
     @GetUser() user: User,
-    @Res({ passthrough: true }) res: Response,
+    @Res({ passthrough: true }) res: expressResponse,
   ) {
     // const userId = user.id;
     console.log(user);
@@ -49,8 +49,8 @@ export class PostController {
   }
 
   @UseGuards(JwtGuard)
-  @Post()
   @UseInterceptors(FileInterceptor('car_image', { dest: './uploads' }))
+  @Post()
   async create(
     @UploadedFile(
       new ParseFilePipe({
@@ -63,10 +63,21 @@ export class PostController {
     file: Express.Multer.File,
     @Body() dto: CreatePostDto,
     @GetUser() user: User,
-    @Res({ passthrough: true }) res: Response,
+    @Res({ passthrough: true }) res: expressResponse,
   ) {
     const userId = user.id;
-    console.log('file is : ', file);
+    console.log('deebuuuug from post.controller.ts');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3001');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader(
+      'Access-Control-Allow-Methods',
+      'GET, POST, OPTIONS, PUT, PATCH, DELETE',
+    );
+    res.setHeader(
+      'Access-Control-Allow-Headers',
+      'X-Requested-With,content-type',
+    );
+
     return this.PostService.create(dto, userId, res, file);
   }
 
@@ -74,6 +85,37 @@ export class PostController {
   @Put(':id')
   async update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
     return this.PostService.update(parseInt(id), updatePostDto);
+  }
+
+  @UseGuards(JwtGuard)
+  @UseInterceptors(FileInterceptor('car_image', { dest: './uploads' }))
+  @Post('single')
+  async single(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: 1000000 }),
+          new FileTypeValidator({ fileType: 'image/jpeg' }),
+        ],
+      }),
+    )
+    file: Express.Multer.File,
+
+    @Res() res: expressResponse,
+  ) {
+    console.log('deebuuuug from post.controller.ts');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3001');
+    // res.setHeader('Access-Control-Allow-Credentials', 'true');
+    // res.setHeader(
+    //   'Access-Control-Allow-Methods',
+    //   'GET, POST, OPTIONS, PUT, PATCH, DELETE',
+    // );
+    // res.setHeader(
+    //   'Access-Control-Allow-Headers',
+    //   'X-Requested-With,content-type',
+    // );
+    res.status(201).send('hello');
+    console.log(file);
   }
 
   @UseGuards(JwtGuard)

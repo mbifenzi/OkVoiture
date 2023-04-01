@@ -1,6 +1,11 @@
-import { Button, Modal, Textarea, TextInput } from "@mantine/core";
-import React from "react";
+import { Button, FileInput, Modal, Textarea, TextInput } from "@mantine/core";
+import React, { SyntheticEvent } from "react";
 import { Box, Select } from "tabler-icons-react";
+import { Dropzone, DropzoneProps, IMAGE_MIME_TYPE } from '@mantine/dropzone';
+import { IconUpload, IconPhoto, IconX } from '@tabler/icons-react';
+import { Group, Text, useMantineTheme}  from '@mantine/core';
+// import { rem } from '@mantine/styles';
+
 
 const PostModal = ({
   showPostModal,
@@ -18,17 +23,19 @@ const PostModal = ({
     // add more years as needed
   ];
 
-  const [title, setTitle] = React.useState("");
-  const [car_model, setCarModel] = React.useState("");
-  const [car_year, setCarYear] = React.useState("");
-  const [car_color, setCarColor] = React.useState("");
-  const [car_price, setCarPrice] = React.useState("");
-  const [car_description, setCarDescription] = React.useState("");
-  const [car_image, setCarImage] = React.useState("");
-  const [link, setLink] = React.useState("");
+  const [title, setTitle] = React.useState("test");
+  const [car_model, setCarModel] = React.useState("test");
+  const [car_year, setCarYear] = React.useState("2010");
+  const [car_color, setCarColor] = React.useState("test");
+  const [car_price, setCarPrice] = React.useState("test");
+  const [car_description, setCarDescription] = React.useState("test");
+  const [car_image, setCarImage] = React.useState<File[]>([]);
+  const [link, setLink] = React.useState("test");
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: SyntheticEvent) => {
+    e.preventDefault();
     console.log("handleSubmit");
+    console.log(car_image);
     try {
       const response = await fetch("http://localhost:3000/post", {
         method: "POST",
@@ -61,12 +68,82 @@ const PostModal = ({
     }
   };
 
+  const testSubmit = async () => {
+    console.log("testSubmit");
+    try 
+    {
+      const response = await fetch("http://localhost:3000/post/single", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Access-Control-Allow-Headers": "Content-Type",
+          "Access-Control-Allow-Origin": "http://localhost:3000",
+          "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+          "Content-Type": "image/jpeg",
+        },
+      });
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
+  const FileZone = (props: Partial<DropzoneProps>) => {
+    const theme = useMantineTheme();
+    const setFiles = (files: File[]) => {
+      setCarImage(files);
+      console.log("files set", files);
+    };
+    return (
+      <Dropzone
+        onDrop={(files) => setFiles(files)}
+        onReject={(files) => console.log('rejected files', files)}
+        maxSize={3 * 1024 ** 2}
+        accept={IMAGE_MIME_TYPE}
+        {...props}
+      >
+        <Group position="center" spacing="xl" style={{ minHeight: 200, pointerEvents: 'none' }}>
+        <Dropzone.Accept>
+          <IconUpload
+            size="3.2rem"
+            stroke={1.5}
+            color={theme.colors[theme.primaryColor][theme.colorScheme === 'dark' ? 4 : 6]}
+          />
+        </Dropzone.Accept>
+        <Dropzone.Reject>
+          <IconX
+            size="3.2rem"
+            stroke={1.5}
+            color={theme.colors.red[theme.colorScheme === 'dark' ? 4 : 6]}
+          />
+        </Dropzone.Reject>
+        <Dropzone.Idle>
+          <IconPhoto size="3.2rem" stroke={1.5} />
+        </Dropzone.Idle>
+
+        <div>
+          <Text size="xl" inline>
+            Drag images here or click to select files
+          </Text>
+          <Text size="sm" color="dimmed" inline mt={7}>
+            Attach as many files as you like, each file should not exceed 5mb
+          </Text>
+        </div>
+      </Group>
+      </Dropzone>
+    );
+  };
+
+
   return (
     <div className="">
       <Modal
         title="Modal title"
         onClose={() => setShowPostModal(false)}
         opened={showPostModal}
+        centered
+        size="50%"
       >
         <TextInput label="Title" name="title" placeholder="Enter post title" />
         <TextInput
@@ -107,19 +184,18 @@ const PostModal = ({
             setCarDescription(e.target.value);
             }}
         />
-        <TextInput
-          label="Car Image"
-          name="car_image"
-          placeholder="Upload car image"
-            onChange={(e) => {
-            setCarImage(e.target.value);
-            }}
-        />
+        {/* <FileInput label="Car Image" name="car_image" /> */}
+        {/* <FileZone /> */}
+        <input type="file" onChange={(e) => {
+          if (e.target.files) {
+            setCarImage(Array.from(e.target.files));
+          }
+        }} />
         <TextInput label="Link" name="link" placeholder="Enter link" />
         <Button
           variant="default"
           onClick={() => {
-            handleSubmit();
+            testSubmit();
           }}
         >
           Create Post

@@ -1,9 +1,6 @@
 import { Body, Injectable } from '@nestjs/common';
 import { CreatePostDto, UpdatePostDto } from './dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { AuthDto } from 'src/auth/dto';
-import { UserDto } from 'src/user/dto/user.dto';
-import { GetUser } from 'src/auth/getUser.decorator';
 import { Response } from 'express';
 import { User } from '@prisma/client';
 import * as fs from 'fs';
@@ -39,6 +36,7 @@ export class PostService {
     file: Express.Multer.File,
   ) {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3001');
+    console.log('Deeeebuuug');
     const userFolderPath = `./uploads/${userId}`;
     if (!fs.existsSync(userFolderPath)) {
       fs.mkdirSync(userFolderPath);
@@ -76,6 +74,7 @@ export class PostService {
         car_image: imagePath,
       },
     });
+    
     return updatedPost;
   }
 
