@@ -74,7 +74,7 @@ export class PostService {
         car_image: imagePath,
       },
     });
-    
+
     return updatedPost;
   }
 

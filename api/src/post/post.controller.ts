@@ -94,27 +94,17 @@ export class PostController {
     @UploadedFile(
       new ParseFilePipe({
         validators: [
-          new MaxFileSizeValidator({ maxSize: 1000000 }),
+          new MaxFileSizeValidator({ maxSize: 10000000 }),
           new FileTypeValidator({ fileType: 'image/jpeg' }),
         ],
       }),
     )
     file: Express.Multer.File,
 
-    @Res() res: expressResponse,
+    @Res({ passthrough: true }) res: expressResponse,
   ) {
     console.log('deebuuuug from post.controller.ts');
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3001');
-    // res.setHeader('Access-Control-Allow-Credentials', 'true');
-    // res.setHeader(
-    //   'Access-Control-Allow-Methods',
-    //   'GET, POST, OPTIONS, PUT, PATCH, DELETE',
-    // );
-    // res.setHeader(
-    //   'Access-Control-Allow-Headers',
-    //   'X-Requested-With,content-type',
-    // );
-    res.status(201).send('hello');
     console.log(file);
   }
 
