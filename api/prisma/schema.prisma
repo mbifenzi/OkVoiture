@@ -34,7 +34,7 @@ model Post {
   car_color       String
   car_price       String
   car_description String
-  car_config      String[]
+  car_config      String
   car_image       String[]
   created_at      DateTime   @default(now())
   updated_at      DateTime   @updatedAt

@@ -65,12 +65,13 @@ const PostModal = ({
   const [car_description, setCarDescription] = React.useState("");
   const [car_image, setCarImage] = React.useState<File[]>([]);
   // const [link, setLink] = React.useState("");
-  const [car_config, setCarConfig] = React.useState<string[]>([]);
+  const [car_config, setCarConfig] = React.useState<string>("");
 
   const handleSubmit = async () => {
     const Axios = axios.create({
       withCredentials: true,
     });
+    console.log(car_config);
     const formData = new FormData();
     formData.append("title", title);
     formData.append("car_model", car_model);
@@ -79,7 +80,7 @@ const PostModal = ({
     formData.append("car_price", car_price);
     formData.append("car_description", car_description);
     formData.append("car_image", car_image[0]);
-    formData.append("car_config", car_config.toString());
+    formData.append("car_config", car_config);
 
     try {
       Axios.post("http://localhost:3000/post", formData, {
@@ -125,7 +126,6 @@ const PostModal = ({
     const theme = useMantineTheme();
     const setFiles = (files: File[]) => {
       setCarImage(files);
-      console.log("files set", files);
     };
     return (
       <Dropzone
@@ -184,7 +184,14 @@ const PostModal = ({
         centered
         size="50%"
       >
-        <TextInput label="Title" name="title" placeholder="Enter post title" />
+        <TextInput
+          label="Title"
+          name="title"
+          placeholder="Enter post title"
+          onChange={(e) => {
+            setTitle(e.target.value);
+          }}
+        />
         <TextInput
           label="Car Model"
           name="car_model"
@@ -211,7 +218,7 @@ const PostModal = ({
           data={data}
           label="Your favorite frameworks/libraries"
           placeholder="Pick all that you like"
-          onChange={(values) => setCarConfig(values)}
+          onChange={(values) => setCarConfig(values.toString())}
         />
         <TextInput
           label="Car Price"
@@ -240,7 +247,7 @@ const PostModal = ({
             }
           }}
         /> */}
-        <TextInput label="Link" name="link" placeholder="Enter link" />
+        {/* <TextInput label="Link" name="link" placeholder="Enter link" /> */}
         <Button
           variant="default"
           onClick={() => {

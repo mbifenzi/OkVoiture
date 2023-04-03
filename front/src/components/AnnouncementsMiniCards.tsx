@@ -9,6 +9,7 @@ import {
   Center,
   Button,
 } from "@mantine/core";
+import { useState } from "react";
 // import { IconGasStation, IconGauge, IconManualGearbox, IconUsers } from '@tabler/icons';
 import { AiOutlineHeart } from "react-icons/ai";
 
@@ -63,6 +64,10 @@ const mockdata = [
 export function AnnouncementsMiniCards(post: any) {
   const Post = post.post;
   console.log("post", Post);
+  const configs = Post.car_config.split(",");
+  console.log("configs", configs);
+  // setPostConfig(Post.car_config);
+  // console.log("postConfig", postConfig);
   const { classes } = useStyles();
   const features = mockdata.map((feature) => (
     <Center key={feature.label}>
@@ -94,7 +99,12 @@ export function AnnouncementsMiniCards(post: any) {
           Basic configuration
         </Text>
         <Group spacing={8} mb={-8}>
-          {features}
+          {configs.map((feature:any) => (
+            <Center key={feature}>
+              <AiOutlineHeart size={18} className={classes.icon} stroke={1.5} />
+              <Text size="xs">{feature}</Text>
+            </Center>
+          ))}
         </Group>
       </Card.Section>
 

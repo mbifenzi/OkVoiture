@@ -22,8 +22,8 @@ export class CreatePostDto {
   car_price: string;
 
   @IsNotEmpty()
-  @IsString()
-  car_config: string[];
+  // @IsString()
+  car_config: string;
 
   @IsNotEmpty()
   @IsString()
@@ -69,5 +69,5 @@ export class UpdatePostDto {
 
   @IsNotEmpty()
   @IsString()
-  car_config: string[];
+  car_config: string;
 }

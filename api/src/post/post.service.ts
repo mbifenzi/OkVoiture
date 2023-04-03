@@ -49,6 +49,7 @@ export class PostService {
         car_color: createPostDto.car_color,
         car_price: createPostDto.car_price,
         car_description: createPostDto.car_description,
+        car_config: createPostDto.car_config,
         author: {
           connect: { id: userId },
         },
