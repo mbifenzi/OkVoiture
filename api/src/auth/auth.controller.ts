@@ -17,6 +17,7 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto';
+import { SignUpDto } from './dto/signup.dto';
 // import * as argon from 'argon2';
 import { AuthGuard } from '@nestjs/passport';
 // import { UserDto } from 'src/user/dto/user.dto';
@@ -64,7 +65,7 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('signup')
-  async signup(@Body() dto: AuthDto) {
+  async signup(@Body() dto: SignUpDto) {
     return this.authService.signup(dto);
   }
 

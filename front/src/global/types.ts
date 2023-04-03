@@ -34,6 +34,7 @@ export interface IUserMetadata {
     }
 
   export interface TPost{
+    [x: string]: any;
     id: string;
     car_name: string;
     car_model: string;

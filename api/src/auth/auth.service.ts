@@ -6,6 +6,7 @@ import { Prisma } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { Request, Response } from 'express';
+import { SignUpDto } from './dto/signup.dto';
 
 @Injectable({})
 export class AuthService {
@@ -38,13 +39,15 @@ export class AuthService {
     return token;
   }
 
-  async signup(dto: AuthDto) {
+  async signup(dto: SignUpDto) {
     const hash = await argon.hash(dto.password);
     try {
       const user = await this.prisma.user.create({
         data: {
           email: dto.email,
           hash,
+          firstName: dto.firstName,
+          lastName: dto.lastName,
         },
       });
       // delete user.hash;

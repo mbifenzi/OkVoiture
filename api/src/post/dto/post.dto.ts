@@ -23,15 +23,15 @@ export class CreatePostDto {
 
   @IsNotEmpty()
   @IsString()
+  car_config: string[];
+
+  @IsNotEmpty()
+  @IsString()
   car_description: string;
 
   // @IsNotEmpty()
   // @IsString()
   car_image: string;
-
-  @IsNotEmpty()
-  @IsString()
-  link: string;
 }
 
 export class UpdatePostDto {
@@ -66,4 +66,8 @@ export class UpdatePostDto {
   @IsNotEmpty()
   @IsString()
   link: string;
+
+  @IsNotEmpty()
+  @IsString()
+  car_config: string[];
 }

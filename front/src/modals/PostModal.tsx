@@ -5,6 +5,7 @@ import { Dropzone, DropzoneProps, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { IconUpload, IconPhoto, IconX } from "@tabler/icons-react";
 import { Group, Text, useMantineTheme } from "@mantine/core";
 import axios from "axios";
+import { MultiSelect } from "@mantine/core";
 // import { rem } from '@mantine/styles';
 
 const PostModal = ({
@@ -22,15 +23,49 @@ const PostModal = ({
     { value: "2021", label: "2021" },
     // add more years as needed
   ];
+  const data = [
+    { value: "gasoline", label: "Gasoline" },
+    { value: "diesel", label: "Diesel" },
+    { value: "electric", label: "Electric" },
+    { value: "hybrid", label: "Hybrid" },
+    { value: "manual", label: "Manual Transmission" },
+    { value: "automatic", label: "Automatic Transmission" },
+    { value: "2-door", label: "2 Doors" },
+    { value: "4-door", label: "4 Doors" },
+    { value: "5-door", label: "5 Doors" },
+    { value: "2-seater", label: "2 Seater" },
+    { value: "4-seater", label: "4 Seater" },
+    { value: "5-seater", label: "5 Seater" },
+    { value: "air-conditioning", label: "Air Conditioning" },
+    { value: "power-steering", label: "Power Steering" },
+    { value: "power-windows", label: "Power Windows" },
+    { value: "stereo-system", label: "Stereo System" },
+    { value: "gps-navigation", label: "GPS Navigation System" },
+    { value: "cruise-control", label: "Cruise Control" },
+    { value: "parking-sensors", label: "Parking Sensors" },
+    { value: "rear-camera", label: "Rear Camera" },
+    { value: "airbags", label: "Airbags" },
+    { value: "anti-lock-brakes", label: "Anti-lock Brakes" },
+    { value: "stability-control", label: "Stability Control" },
+    { value: "leather-seats", label: "Leather Seats" },
+    { value: "heated-seats", label: "Heated Seats" },
+    { value: "sunroof", label: "Sunroof" },
+    { value: "alloy-wheels", label: "Alloy Wheels" },
+    { value: "steel-wheels", label: "Steel Wheels" },
+    { value: "small-engine", label: "Small Engine" },
+    { value: "medium-engine", label: "Medium Engine" },
+    { value: "large-engine", label: "Large Engine" },
+  ];
 
-  const [title, setTitle] = React.useState("test");
-  const [car_model, setCarModel] = React.useState("test");
+  const [title, setTitle] = React.useState("");
+  const [car_model, setCarModel] = React.useState("");
   const [car_year, setCarYear] = React.useState("2010");
-  const [car_color, setCarColor] = React.useState("test");
-  const [car_price, setCarPrice] = React.useState("test");
-  const [car_description, setCarDescription] = React.useState("test");
+  const [car_color, setCarColor] = React.useState("");
+  const [car_price, setCarPrice] = React.useState("");
+  const [car_description, setCarDescription] = React.useState("");
   const [car_image, setCarImage] = React.useState<File[]>([]);
-  const [link, setLink] = React.useState("test");
+  // const [link, setLink] = React.useState("");
+  const [car_config, setCarConfig] = React.useState<string[]>([]);
 
   const handleSubmit = async () => {
     const Axios = axios.create({
@@ -44,7 +79,7 @@ const PostModal = ({
     formData.append("car_price", car_price);
     formData.append("car_description", car_description);
     formData.append("car_image", car_image[0]);
-    formData.append("link", link);
+    formData.append("car_config", car_config.toString());
 
     try {
       Axios.post("http://localhost:3000/post", formData, {
@@ -172,6 +207,12 @@ const PostModal = ({
             setCarColor(e.target.value);
           }}
         />
+        <MultiSelect
+          data={data}
+          label="Your favorite frameworks/libraries"
+          placeholder="Pick all that you like"
+          onChange={(values) => setCarConfig(values)}
+        />
         <TextInput
           label="Car Price"
           name="car_price"
@@ -189,8 +230,8 @@ const PostModal = ({
           }}
         />
         {/* <FileInput label="Car Image" name="car_image" /> */}
-        {/* <FileZone /> */}
-        <input
+        <FileZone />
+        {/* <input
           type="file"
           name="car_image"
           onChange={(e) => {
@@ -198,7 +239,7 @@ const PostModal = ({
               setCarImage(Array.from(e.target.files));
             }
           }}
-        />
+        /> */}
         <TextInput label="Link" name="link" placeholder="Enter link" />
         <Button
           variant="default"

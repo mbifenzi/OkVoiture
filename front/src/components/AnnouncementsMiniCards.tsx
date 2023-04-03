@@ -1,3 +1,4 @@
+import { TPost } from "@/global/types";
 import {
   Card,
   Image,
@@ -59,7 +60,9 @@ const mockdata = [
   { label: "Electric", icon: AiOutlineHeart },
 ];
 
-export function AnnouncementsMiniCards() {
+export function AnnouncementsMiniCards(post: any) {
+  const Post = post.post;
+  console.log("post", Post);
   const { classes } = useStyles();
   const features = mockdata.map((feature) => (
     <Center key={feature.label}>
@@ -78,9 +81,9 @@ export function AnnouncementsMiniCards() {
 
       <Group position="apart" mt="md">
         <div>
-          <Text weight={500}>Tesla Model S</Text>
+          <Text weight={500}>{Post.car_name}</Text>
           <Text size="xs" color="dimmed">
-            Free recharge at any station
+            Free day rent every 7 days
           </Text>
         </div>
         <Badge variant="outline">25% off</Badge>
@@ -90,7 +93,6 @@ export function AnnouncementsMiniCards() {
         <Text size="sm" color="dimmed" className={classes.label}>
           Basic configuration
         </Text>
-
         <Group spacing={8} mb={-8}>
           {features}
         </Group>
@@ -100,7 +102,7 @@ export function AnnouncementsMiniCards() {
         <Group spacing={30}>
           <div>
             <Text size="xl" weight={700} sx={{ lineHeight: 1 }}>
-              $168.00
+              {Post.car_price}
             </Text>
             <Text
               size="sm"

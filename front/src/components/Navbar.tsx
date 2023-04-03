@@ -145,34 +145,30 @@ const Navbar = () => {
   const [showSignupModal, setShowSignupModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showPostModal, setShowPostModal] = useState(false);
-  const [
-    userData, setUseData
-  ] = useState(null)
-  const [isLoggedin, setIsLoggedin] = useState(false)
+  const [userData, setUseData] = useState(null);
+  const [isLoggedin, setIsLoggedin] = useState(false);
 
   const fetchUser = async () => {
     console.log("fetching user");
-    const res = await fetch("http://localhost:3000/auth/me", {
-      credentials: "include",
-      method: "GET",
-      headers: {
-        "Access-Control-Allow-Headers" : "Content-Type",
-        "Access-Control-Allow-Origin": "http://localhost:3000",
-        "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
-        "Content-Type": "application/json",
-      },
-    });
-      
     try {
+      const res = await fetch("http://localhost:3000/auth/me", {
+        credentials: "include",
+        method: "GET",
+        headers: {
+          "Access-Control-Allow-Headers": "Content-Type",
+          "Access-Control-Allow-Origin": "http://localhost:3000",
+          "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+          "Content-Type": "application/json",
+        },
+      });
+
       const data = await res.json();
       console.log(data);
-      setUseData(data)
-      setIsLoggedin(true)
+      setUseData(data);
+      setIsLoggedin(true);
+    } catch (e) {
+      console.log(e);
     }
-    catch(e) {
-      console.log(e)
-    }
-  
   };
   useEffect(() => {
     fetchUser();
@@ -257,20 +253,46 @@ const Navbar = () => {
               Academy
             </Link>
           </Group>
-        {
-          userData ? (
+          {userData ? (
             <Group className={classes.hiddenMobile}>
-              <Button onClick={() => {setShowPostModal(true);console.log('test')}} variant="default">Create Post</Button>
-              <Button onClick={() => {setShowLoginModal(true)}} variant="default">Log out</Button>
+              <Button
+                onClick={() => {
+                  setShowPostModal(true);
+                  console.log("test");
+                }}
+                variant="default"
+              >
+                Create Post
+              </Button>
+              <Button
+                onClick={() => {
+                  setShowLoginModal(true);
+                }}
+                variant="default"
+              >
+                Log out
+              </Button>
             </Group>
           ) : (
             <Group className={classes.hiddenMobile}>
-              <Button onClick={() => {setShowLoginModal(true)}} variant="default">Log in</Button>
-              <Button onClick={() => {setShowSignupModal(true);console.log(showSignupModal)}} >Sign up</Button>
+              <Button
+                onClick={() => {
+                  setShowLoginModal(true);
+                }}
+                variant="default"
+              >
+                Log in
+              </Button>
+              <Button
+                onClick={() => {
+                  setShowSignupModal(true);
+                  console.log(showSignupModal);
+                }}
+              >
+                Sign up
+              </Button>
             </Group>
-          )
-
-        }
+          )}
           {/* <Group className={classes.hiddenMobile}>
             <Button onClick={() => {setShowLoginModal(true)}} variant="default">Log in</Button>
             <Button onClick={() => {setShowSignupModal(true);console.log(showSignupModal)}} >Sign up</Button>
@@ -321,32 +343,54 @@ const Navbar = () => {
             my="sm"
             color={theme.colorScheme === "dark" ? "dark.5" : "gray.1"}
           />
-          {
-            userData ? (
-              <div>
-                <p>{userData.email}</p>
-                </div>
-            ) : (
-          <Group position="center" grow pb="xl" px="md">
-            <Button variant="default" onClick={() => {setShowLoginModal(true)}}>llLog in</Button>
-            <Button onClick={() => {console.log("alo")}}>Sign up</Button>
-          </Group>
-            )
-          }
+          {userData ? (
+            <div>
+              <p>{userData}</p>
+            </div>
+          ) : (
+            <Group position="center" grow pb="xl" px="md">
+              <Button
+                variant="default"
+                onClick={() => {
+                  setShowLoginModal(true);
+                }}
+              >
+                log in
+              </Button>
+              <Button
+                onClick={() => {
+                  console.log("alo");
+                }}
+              >
+                Sign up
+              </Button>
+            </Group>
+          )}
         </ScrollArea>
       </Drawer>
       <div>
-        {showSignupModal && <SignUpModal showSignupModal={showSignupModal} setShowSignupModal={setShowSignupModal}/>}
-        {showLoginModal && <LoginModal 
-        onSuccess={
-          () => {
-            fetchUser()
-            setShowLoginModal(false)
-          }
-        }
-        showLoginModal={showLoginModal} setShowLoginModal={setShowLoginModal}/>}
-        {showPostModal && <PostModal showPostModal={showPostModal} setShowPostModal={setShowPostModal}/>}
-        
+        {showSignupModal && (
+          <SignUpModal
+            showSignupModal={showSignupModal}
+            setShowSignupModal={setShowSignupModal}
+          />
+        )}
+        {showLoginModal && (
+          <LoginModal
+            onSuccess={() => {
+              fetchUser();
+              setShowLoginModal(false);
+            }}
+            showLoginModal={showLoginModal}
+            setShowLoginModal={setShowLoginModal}
+          />
+        )}
+        {showPostModal && (
+          <PostModal
+            showPostModal={showPostModal}
+            setShowPostModal={setShowPostModal}
+          />
+        )}
       </div>
     </Box>
   );

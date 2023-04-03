@@ -1,17 +1,19 @@
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
-import { CreatePostDto } from 'src/post/dto';
 
-export class UserDto {
-  @IsString()
-  id: string;
-
+export class SignUpDto {
   @IsEmail()
+  @IsNotEmpty()
   email: string;
 
   @IsString()
-  firstName: string;
-  @IsString()
-  lastName: string;
+  @IsNotEmpty()
+  password: string;
 
-  posts?: CreatePostDto[];
+  @IsString()
+  @IsNotEmpty()
+  firstName: string;
+
+  @IsString()
+  @IsNotEmpty()
+  lastName: string;
 }

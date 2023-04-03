@@ -11,35 +11,36 @@ datasource db {
 }
 
 model User {
-  id        Int   @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   email     String   @unique
   hash      String
-  firstName String?
-  lastName  String?
+  firstName String
+  lastName  String
   posts     Post[]
 
   @@map("users")
 }
 
 model Post {
-  id        Int   @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  published Boolean  @default(true)
-  car_name       String
-  car_model      String
-  car_year       String
-  car_color      String
-  car_price      String
+  id              Int        @id @default(autoincrement())
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  published       Boolean    @default(true)
+  car_name        String
+  car_model       String
+  car_year        String
+  car_color       String
+  car_price       String
   car_description String
-  car_image      String[]
-  created_at     DateTime     @default(now())
-  updated_at     DateTime     @updatedAt
-  reserved_at    DateTime[]
-  author    User?    @relation(fields: [authorId], references: [id])
-  authorId  Int?
+  car_config      String[]
+  car_image       String[]
+  created_at      DateTime   @default(now())
+  updated_at      DateTime   @updatedAt
+  reserved_at     DateTime[]
+  author          User?      @relation(fields: [authorId], references: [id])
+  authorId        Int?
 
   @@map("posts")
 }

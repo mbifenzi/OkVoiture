@@ -146,7 +146,6 @@ const UserCardImage = () => {
   const [posts, setPosts] = useState<TPost[]>(null);
 
   const fetchPosts = async () => {
-    console.log('poooosts');
     const res = await fetch("http://localhost:3000/post", {
       credentials: "include",
       method: "GET",
@@ -159,7 +158,6 @@ const UserCardImage = () => {
     });
 
     const data = await res.json();
-    console.log('poooosts', data);
     setPosts(data);
   };
 
@@ -175,7 +173,6 @@ const UserCardImage = () => {
         },
     });
     const data = await res.json();
-    console.log('yaaaa');
     setUserData(data);
   };
 
@@ -183,7 +180,7 @@ const UserCardImage = () => {
     fetchUser();
     fetchPosts();
   }, []);
-
+  // console.log(posts);
 
   return (
     <main>
@@ -204,14 +201,14 @@ const UserCardImage = () => {
           className={classes.avatar}
         />
         <Text align="center" size="xl" weight={500} mt="lg">
-          bif
+          {userData?.firstName } {userData?.lastName}
         </Text>
         <Text align="center" size="sm" color="dimmed">
-          engineer
+          {userData?.email}
         </Text>
-        <Group mt="md" position="center" spacing={30}>
+        {/* <Group mt="md" position="center" spacing={30}>
           test
-        </Group>
+        </Group> */}
         <Group mt="md" position="center" spacing={30}>
           <Button
             radius="md"
@@ -226,7 +223,7 @@ const UserCardImage = () => {
       <Grid className="mt-4">
         {posts?.map((annoucementsData) => (
           <Grid.Col span={4} key={annoucementsData.id}>
-            <AnnouncementsMiniCards key={annoucementsData.id} />
+            <AnnouncementsMiniCards post={annoucementsData} key={annoucementsData.id} />
           </Grid.Col>
         ))}
       </Grid>
