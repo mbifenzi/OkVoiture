@@ -5,6 +5,8 @@ import { PostModule } from './post/post.module';
 
 import { PrismaModule } from './prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -13,6 +15,11 @@ import { ConfigModule } from '@nestjs/config';
     UserModule,
     PostModule,
     PrismaModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'),
+      serveRoot: '/uploads',
+      renderPath: '/uploads',
+      }),
   ],
 })
 export class AppModule {}

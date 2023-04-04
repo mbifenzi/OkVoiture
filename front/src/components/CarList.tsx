@@ -9,6 +9,7 @@ import { TPostMetadata } from "@/global/types";
 import Image from "next/image";
 import Car from "@/assets/default_car.jpg";
 import CarListItemModal from "@/modals/CarListItemModal";
+import axios from "axios";
 const country = [
   "Casablanca",
   "Rabat",
@@ -64,9 +65,13 @@ const CarListItem = ({
   metadata: TPostMetadata;
   onClick: () => void;
 }) => {
+  const [postMetadata, setPostMetadata] = React.useState<TPostMetadata>(metadata);
   const relativeTimeFormat = new Intl.RelativeTimeFormat("en", {
     numeric: "auto",
   });
+  
+  
+
   const createdAt = new Date(metadata.created_at);
   const currentTime = new Date();
   const timeDifference = currentTime.getTime() - createdAt.getTime();
@@ -130,30 +135,21 @@ const CarListItem = ({
 
 const CarList = () => {
   const [showModal, setShowModal] = React.useState(false);
-  const [posts, setPosts] = React.useState([]);
+  const [posts, setPosts] = React.useState<any>([]);
+
 
 
   const fetchPosts = async () => {
-    const res = await fetch("http://localhost:3000/post/all", {
-      credentials: "include",
-      method: "GET",
-        headers: {
-          "Access-Control-Allow-Headers" : "Content-Type",
-          "Access-Control-Allow-Origin": "http://localhost:3000",
-          "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
-          "Content-Type": "application/json",
-        },
-    });
-    const data = await res.json();
-    console.log(data);
-    return data;
+    try {
+      const res = await axios.get("http://localhost:3000/post/all").then((res) => {
+        console.log(res.data);
+        setPosts(res.data);
+      });
+    }
+    catch (err) {
+      console.log(err);
+    }
   };
-
-  // const { data, error } = useSWR("/api/posts", async (url) => {
-  //   const res = await fetch(url);
-  //   const data = await res.json();
-  //   return data;
-  // });
 
   useEffect(() => {
     fetchPosts();
@@ -163,21 +159,23 @@ const CarList = () => {
   return (
     <div className="w-full flex flex-col gap-6">
       <SearchBar />
-      {Metadata.map((item) => {
-        return (
+      <div className="w-full flex flex-col gap-6">
+        {posts.map((post:any) => (
           <CarListItem
+            key={post.id}
+            metadata={post}
             onClick={() => setShowModal(true)}
-            key={item.id}
-            metadata={item}
           />
-        );
-      })}
-      {showModal && (
+        ))}
+        {showModal && (
         <div>
-          <CarListItemModal setShowModal={setShowModal} showModal={true} />
+          <CarListItemModal setShowModal={setShowModal} showModal={true}/>
         </div>
       )}
+        
     </div>
+    
+  </div>
   );
 };
 

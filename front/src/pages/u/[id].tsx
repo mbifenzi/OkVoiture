@@ -73,77 +73,12 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const AnnoucementsCard = ({ annoucementsData }: { annoucementsData: any }) => {
-  const mockdata = [
-    { label: "4 passengers", icon: avatar },
-    { label: "100 km/h in 4 seconds", icon: avatar },
-    { label: "Automatic gearbox", icon: avatar },
-    { label: "Electric", icon: avatar },
-  ];
-  const { classes } = useStyles();
-  const features = mockdata.map((feature) => (
-    <Center key={feature.label}>
-      <feature.icon size={18} className={classes.icon} stroke={1.5} />
-      <Text size="xs">{feature.label}</Text>
-    </Center>
-  ));
 
-  return (
-    <Card withBorder radius="md" className={classes.card}>
-      <Card.Section className={classes.imageSection}>
-        <Image src="https://i.imgur.com/ZL52Q2D.png" alt="Tesla Model S" />
-      </Card.Section>
-
-      <Group position="apart" mt="md">
-        <div>
-          <Text weight={500}>Tesla Model S</Text>
-          <Text size="xs" color="dimmed">
-            Free recharge at any station
-          </Text>
-        </div>
-        <Badge variant="outline">25% off</Badge>
-      </Group>
-
-      <Card.Section className={classes.section} mt="md">
-        <Text size="sm" color="dimmed" className={classes.label}>
-          Basic configuration
-        </Text>
-
-        <Group spacing={8} mb={-8}>
-          blabla
-        </Group>
-      </Card.Section>
-
-      <Card.Section className={classes.section}>
-        <Group spacing={30}>
-          <div>
-            <Text size="xl" weight={700} sx={{ lineHeight: 1 }}>
-              $168.00
-            </Text>
-            <Text
-              size="sm"
-              color="dimmed"
-              weight={500}
-              sx={{ lineHeight: 1 }}
-              mt={3}
-            >
-              per day
-            </Text>
-          </div>
-
-          <Button radius="xl" style={{ flex: 1 }}>
-            Rent now
-          </Button>
-        </Group>
-      </Card.Section>
-    </Card>
-  );
-};
 
 const UserCardImage = () => {
   const { classes, theme } = useStyles();
   const [userData, setUserData] = useState<any>(null);
-  const [posts, setPosts] = useState<TPost[]>(null);
+  const [posts, setPosts] = useState<TPost[]>([]);
 
   const fetchPosts = async () => {
     const res = await fetch("http://localhost:3000/post", {

@@ -10,7 +10,7 @@ import { Card, Text, Badge, Button, Group } from "@mantine/core";
 import defaultImage from "@/assets/author.jpg";
 
 const AnnouncerCard = ({ announcerData }: { announcerData: any }) => {
-  console.log(announcerData.name);
+  console.log(announcerData);
   return (
     <Paper
       radius="md"
