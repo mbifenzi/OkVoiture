@@ -4,8 +4,8 @@ const nextConfig = {
     appDir: true,
   },
   images: {
-    domains: ['assets.example.com'],
+    domains: ["assets.example.com", "localhost:3000", "127.0.0.1:3000", ""],
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

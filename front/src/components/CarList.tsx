@@ -6,7 +6,7 @@ import { AiOutlineHeart } from "react-icons/ai";
 import useSWR from "swr";
 import Metadata from "@/context/Metadata.json";
 import { TPostMetadata } from "@/global/types";
-import Image from "next/image";
+import { Image } from "@mantine/core";
 import Car from "@/assets/default_car.jpg";
 import CarListItemModal from "@/modals/CarListItemModal";
 import axios from "axios";
@@ -65,12 +65,11 @@ const CarListItem = ({
   metadata: TPostMetadata;
   onClick: () => void;
 }) => {
-  const [postMetadata, setPostMetadata] = React.useState<TPostMetadata>(metadata);
+  const [postMetadata, setPostMetadata] =
+    React.useState<TPostMetadata>(metadata);
   const relativeTimeFormat = new Intl.RelativeTimeFormat("en", {
     numeric: "auto",
   });
-  
-  
 
   const createdAt = new Date(metadata.created_at);
   const currentTime = new Date();
@@ -102,30 +101,36 @@ const CarListItem = ({
       "second"
     );
   }
+
+  let carImageLink = metadata.car_image[0].split("./");
+  console.log("carImageLink", carImageLink[1]);
+
   return (
     <div
       onClick={onClick}
       className="w-full h-56 bg-white shadow-md hover:shadow-xl hover:scale-[1.01] cursor-pointer duration-300 rounded-lg "
     >
-      <div className="flex h-56 gap-8 w-full">
+      <div className="flex w-full h-full">
         <Image
-          src={Car}
-          width={200}
-          height={200}
-          alt={""}
-          className="rounded-l-lg"
+          src={`http://localhost:3000/${carImageLink[1]}`}
+          alt="car"
+          height={224}
+          className="w-1/2 h-full rounded-l-lg"
+          radius={3}
         />
-        <div className="flex flex-col justify-between w-full ">
-          <div className="w-full p-4">
-            <div className="w-full flex justify-between ">
+        <div className="flex gap-8 w-full h-full justify-around">
+          <div className="w-full h-full flex flex-col">
+            <div className="flex justify-between w-full p-2 border-b-2 border-gray-200">
               <h1 className="text-2xl font-bold">{metadata.car_name}</h1>
               <AiOutlineHeart className="text-2xl hover:text-red-300 duration-300" />
             </div>
-            <h3>{metadata.car_price}</h3>
-          </div>
-          <div className="px-4">
-            <div className="mt-3 h-px bg-gray-200 w-5/6" />
-            <h3 className="text-gray-400">{timeDifferenceString}</h3>
+            <div className="h-full flex flex-col justify-between">
+              <h3 className="text-gray-400 p-2">{metadata.car_description}</h3>
+              <div className="flex justify-between p-2">
+                <h3>{metadata.car_price}</h3>
+                <h3 className="text-gray-400">{timeDifferenceString}</h3>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -137,16 +142,16 @@ const CarList = () => {
   const [showModal, setShowModal] = React.useState(false);
   const [posts, setPosts] = React.useState<any>([]);
 
-
-
   const fetchPosts = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/post/all").then((res) => {
-        console.log(res.data);
-        setPosts(res.data);
-      });
-    }
-    catch (err) {
+      const res = await axios
+        .get("http://localhost:3000/post/all")
+        .then((res) => {
+          // console.log(res.data);
+          setPosts(res.data);
+          console.log(posts.car_image);
+        });
+    } catch (err) {
       console.log(err);
     }
   };
@@ -154,13 +159,11 @@ const CarList = () => {
   useEffect(() => {
     fetchPosts();
   }, []);
-
-
   return (
     <div className="w-full flex flex-col gap-6">
       <SearchBar />
       <div className="w-full flex flex-col gap-6">
-        {posts.map((post:any) => (
+        {posts.map((post: any) => (
           <CarListItem
             key={post.id}
             metadata={post}
@@ -168,14 +171,12 @@ const CarList = () => {
           />
         ))}
         {showModal && (
-        <div>
-          <CarListItemModal setShowModal={setShowModal} showModal={true}/>
-        </div>
-      )}
-        
+          <div>
+            <CarListItemModal setShowModal={setShowModal} showModal={true} />
+          </div>
+        )}
+      </div>
     </div>
-    
-  </div>
   );
 };
 

@@ -26,6 +26,7 @@ import {
 } from "@tabler/icons";
 import { AnnouncementsMiniCards } from "@/components/AnnouncementsMiniCards";
 import { TPost } from "@/global/types";
+import axios from "axios";
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -78,22 +79,23 @@ const useStyles = createStyles((theme) => ({
 const UserCardImage = () => {
   const { classes, theme } = useStyles();
   const [userData, setUserData] = useState<any>(null);
-  const [posts, setPosts] = useState<TPost[]>([]);
-
+  const [posts, setPosts] = useState<any>(null);
+  const [postImageLink, setPostImageLink] = useState<any>(null);
+  const Axios = axios.create({
+    withCredentials: true,
+  });
+  
   const fetchPosts = async () => {
-    const res = await fetch("http://localhost:3000/post", {
-      credentials: "include",
-      method: "GET",
-        headers: {
-          "Access-Control-Allow-Headers" : "Content-Type",
-          "Access-Control-Allow-Origin": "http://localhost:3000",
-          "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
-          "Content-Type": "application/json",
-        },
-    });
+    try {
+      const res = await Axios.get("http://localhost:3000/post/all").then((res) => {
+        setPosts(res.data);
+        console.log("poooosts", posts);
+      });
+    }
+    catch(err){
+      console.log(err)
+    }
 
-    const data = await res.json();
-    setPosts(data);
   };
 
   const fetchUser = async () => {

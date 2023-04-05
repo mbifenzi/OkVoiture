@@ -70,6 +70,7 @@ const useStyles = createStyles((theme) => ({
     borderTop: `1px solid ${
       theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[3]
     }`,
+    
   },
 
   icon: {
@@ -92,24 +93,7 @@ export function AnnouncementsMiniCards(post: any) {
   const Post = post.post;
   let carImageLink = Post.car_image[0].split("./");
   carImageLink = carImageLink[1];
-  const [carImage, setCarImage] = useState<any>(null);
-
-
-  const getImage = async () => {
-    try {
-      const res = await axios.get(`http://localhost:3000/${carImageLink}`);
-      setCarImage(res.data);
-    }
-    catch (err) {
-      console.log(err);
-    }
-  };
-
-  useEffect(() => {
-    getImage();
-  }, []);
-
-
+  // const [carImage, setCarImage] = useState<any>(null);
 
 
   const configs = Post.car_config.split(",");
@@ -225,30 +209,26 @@ export function AnnouncementsMiniCards(post: any) {
     </Center>
   ));
 
+  console.log(`https://localhost:3000/${carImageLink}`);
+
   return (
-    <Card withBorder radius="md" className={classes.card}>
-      <Card.Section className={classes.imageSection}>
-        <div className="w-full h-72 flex justify-center">
-          <img 
-            src={`http://localhost:3000/${carImageLink}`}
-            alt="car"
-            className="w-fit h-72"
-          />
-        </div>
+    <Card shadow="sm" padding="lg" radius="md" withBorder h={700} className="flex flex-col justify-between m-3">
+      <Card.Section component="a" href="https://mantine.dev/" className=" border-b-2 border-gray-100">
+        <Image
+          src={`http://localhost:3000/${carImageLink}`}
+          height={300}
+          alt="Norway"
+        />
       </Card.Section>
 
-      <Group position="apart" mt="md">
-        <div>
-          <Text weight={500}>{Post.car_name}</Text>
-          <Text size="xs" color="dimmed">
-            Free day rent every 7 days
-          </Text>
-        </div>
-        <Badge variant="outline">25% off</Badge>
+      <Group position="apart" mt="md" mb="xs">
+        <Text weight={500}>{Post.car_name}</Text>
+        <Badge color="pink" variant="light">
+          Available
+        </Badge>
       </Group>
-
-      <Card.Section className={classes.section} mt="md">
-        <Text size="sm" color="dimmed" className={classes.label}>
+      <div className="h-64">
+      <Text size="sm" color="dimmed" className={classes.label}>
           Basic configuration
         </Text>
         <Group spacing={8} mb={-8}>
@@ -263,29 +243,16 @@ export function AnnouncementsMiniCards(post: any) {
             </div>
           ))}
         </Group>
-      </Card.Section>
+      </div>
 
-      <Card.Section className={classes.section}>
-        <Group spacing={30}>
-          <div>
-            <Text size="xl" weight={700} sx={{ lineHeight: 1 }}>
-              {Post.car_price}
-            </Text>
-            <Text
-              size="sm"
-              color="dimmed"
-              weight={500}
-              sx={{ lineHeight: 1 }}
-              mt={3}
-            >
-              per day
-            </Text>
-          </div>
-          <Button radius="xl" style={{ flex: 1 }} variant="default">
-            Rent now
-          </Button>
-        </Group>
-      </Card.Section>
+      <Text size="sm" color="dimmed">
+        lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor
+        sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem
+      </Text>
+
+      <Button variant="light" color="blue" fullWidth mt="md" radius="md">
+        Book Now
+      </Button>
     </Card>
   );
 }

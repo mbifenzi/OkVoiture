@@ -31,7 +31,7 @@ export default function RootLayout({
       <head />
       <body className="bg-gray-50">
         <Navbar />
-        <main className="w-full h-full  container mx-auto">
+        <main className="w-full h-full container mx-auto">
           <div className="w-full flex justify-center items-center">
             <div className="w-2/3 h-56 flex justify-center items-center bg-gray-300 p-8 m-8 font-bold text-xl text-gray-500">
               header ads
