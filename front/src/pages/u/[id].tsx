@@ -1,3 +1,4 @@
+// "use client"
 import styles from "../page.module.css";
 import "../../app/globals.css";
 import { useRouter } from "next/router";
@@ -14,6 +15,7 @@ import {
   Badge,
   Center,
   Grid,
+  useMantineTheme,
 } from "@mantine/core";
 import Navbar from "@/components/Navbar";
 // import image from "../../assets/default_car.jpg";
@@ -74,8 +76,6 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-
-
 const UserCardImage = () => {
   const { classes, theme } = useStyles();
   const [userData, setUserData] = useState<any>(null);
@@ -84,30 +84,30 @@ const UserCardImage = () => {
   const Axios = axios.create({
     withCredentials: true,
   });
-  
+
   const fetchPosts = async () => {
     try {
-      const res = await Axios.get("http://localhost:3000/post/all").then((res) => {
-        setPosts(res.data);
-        console.log("poooosts", posts);
-      });
+      const res = await Axios.get("http://localhost:3000/post/all").then(
+        (res) => {
+          setPosts(res.data);
+          console.log("poooosts", posts);
+        }
+      );
+    } catch (err) {
+      console.log(err);
     }
-    catch(err){
-      console.log(err)
-    }
-
   };
 
   const fetchUser = async () => {
     const res = await fetch("http://localhost:3000/auth/me", {
       credentials: "include",
       method: "GET",
-        headers: {
-          "Access-Control-Allow-Headers" : "Content-Type",
-          "Access-Control-Allow-Origin": "http://localhost:3000",
-          "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
-          "Content-Type": "application/json",
-        },
+      headers: {
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Origin": "http://localhost:3000",
+        "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+        "Content-Type": "application/json",
+      },
     });
     const data = await res.json();
     setUserData(data);
@@ -118,7 +118,7 @@ const UserCardImage = () => {
     fetchPosts();
   }, []);
   // console.log(posts);
-
+  // const breakpoint = useBreakpoint();
   return (
     <main>
       <Navbar />
@@ -138,7 +138,7 @@ const UserCardImage = () => {
           className={classes.avatar}
         />
         <Text align="center" size="xl" weight={500} mt="lg">
-          {userData?.firstName } {userData?.lastName}
+          {userData?.firstName} {userData?.lastName}
         </Text>
         <Text align="center" size="sm" color="dimmed">
           {userData?.email}
@@ -157,11 +157,17 @@ const UserCardImage = () => {
           </Button>
         </Group>
       </Card>
-      <Grid className="mt-4">
-        {posts?.map((annoucementsData) => (
-          <Grid.Col span={4} key={annoucementsData.id}>
-            <AnnouncementsMiniCards post={annoucementsData} key={annoucementsData.id} />
-          </Grid.Col>
+      <Grid className="mt-4 flex justify-center items-center w-full">
+        {posts?.map((annoucementsData: any) => (
+          <div
+            key={annoucementsData.id}
+            className="  flex sm:w-1/2 md:w-1/3 w-full justify-center items-center"
+          >
+            <AnnouncementsMiniCards
+              post={annoucementsData}
+              key={annoucementsData.id}
+            />
+          </div>
         ))}
       </Grid>
     </main>

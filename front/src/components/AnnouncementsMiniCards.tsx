@@ -24,10 +24,7 @@ import {
   FaWind,
   FaMusic,
   FaMapMarkedAlt,
-  FaCruise,
   FaParking,
-  FaCameraRear,
-  FaAirbag,
   FaLock,
   FaBalanceScale,
   FaChair,
@@ -70,7 +67,6 @@ const useStyles = createStyles((theme) => ({
     borderTop: `1px solid ${
       theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[3]
     }`,
-    
   },
 
   icon: {
@@ -94,7 +90,6 @@ export function AnnouncementsMiniCards(post: any) {
   let carImageLink = Post.car_image[0].split("./");
   carImageLink = carImageLink[1];
   // const [carImage, setCarImage] = useState<any>(null);
-
 
   const configs = Post.car_config.split(",");
 
@@ -200,7 +195,6 @@ export function AnnouncementsMiniCards(post: any) {
     return { value, icon };
   });
 
-
   const { classes } = useStyles();
   const features = mockdata.map((feature) => (
     <Center key={feature.label}>
@@ -212,8 +206,19 @@ export function AnnouncementsMiniCards(post: any) {
   console.log(`https://localhost:3000/${carImageLink}`);
 
   return (
-    <Card shadow="sm" padding="lg" radius="md" withBorder h={700} className="flex flex-col justify-between m-3">
-      <Card.Section component="a" href="https://mantine.dev/" className=" border-b-2 border-gray-100">
+    <Card
+      shadow="sm"
+      padding="lg"
+      radius="md"
+      withBorder
+      h={700}
+      className="flex flex-col justify-between m-3"
+    >
+      <Card.Section
+        component="a"
+        href="https://mantine.dev/"
+        className=" border-b-2 border-gray-100"
+      >
         <Image
           src={`http://localhost:3000/${carImageLink}`}
           height={300}
@@ -221,14 +226,19 @@ export function AnnouncementsMiniCards(post: any) {
         />
       </Card.Section>
 
-      <Group position="apart" mt="md" mb="xs">
+      <Group
+        position="apart"
+        mt="md"
+        mb="xs"
+        className="border-b-2 border-gray-200"
+      >
         <Text weight={500}>{Post.car_name}</Text>
         <Badge color="pink" variant="light">
           Available
         </Badge>
       </Group>
-      <div className="h-64">
-      <Text size="sm" color="dimmed" className={classes.label}>
+      <div className="h-64 border-b-2 border-gray-200">
+        <Text size="sm" color="dimmed" className={`${classes.label}`}>
           Basic configuration
         </Text>
         <Group spacing={8} mb={-8}>
@@ -244,11 +254,13 @@ export function AnnouncementsMiniCards(post: any) {
           ))}
         </Group>
       </div>
-
-      <Text size="sm" color="dimmed">
-        lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor
-        sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem
-      </Text>
+      <div className="border-b-2 border-gray-200">
+        <Text size="sm" color="dimmed">
+          lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum
+          dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet
+          lorem
+        </Text>
+      </div>
 
       <Button variant="light" color="blue" fullWidth mt="md" radius="md">
         Book Now

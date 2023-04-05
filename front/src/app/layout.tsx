@@ -1,11 +1,11 @@
 import Navbar from "@/components/Navbar";
 import {FooterSimple} from "@/components/Footer";
 import "./globals.css";
+import { createGetInitialProps } from '@mantine/next';
 
 interface FooterSimpleProps {
   links: { link: string; label: string }[];
 }
-
 export default function RootLayout({
   children,
 }: {
@@ -21,6 +21,9 @@ export default function RootLayout({
       { link: "about", label: "about" },
     ],
   };
+
+
+  
   
   return (
     <html lang="en">
@@ -38,8 +41,8 @@ export default function RootLayout({
             </div>
           </div>
           <div className="w-full flex">
-            <div className="w-3/4 m-2">{children}</div>
-            <div className="w-1/4 bg-gray-300 m-2 rounded-md">ads</div>
+            <div className="lg:w-3/4 w-full m-2 ">{children}</div>
+            <div className="lg:w-1/4 lg:flex  w-full hidden bg-gray-300 m-2 rounded-md ">ads</div>
           </div>
         </main>
           <FooterSimple links={Links.links} />
