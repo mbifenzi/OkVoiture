@@ -1,7 +1,7 @@
 import Navbar from "@/components/Navbar";
-import {FooterSimple} from "@/components/Footer";
+import { FooterSimple } from "@/components/Footer";
 import "./globals.css";
-import { createGetInitialProps } from '@mantine/next';
+import { createGetInitialProps } from "@mantine/next";
 
 interface FooterSimpleProps {
   links: { link: string; label: string }[];
@@ -11,7 +11,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-
   const Links: FooterSimpleProps = {
     links: [
       { link: "home", label: "home" },
@@ -22,15 +21,8 @@ export default function RootLayout({
     ],
   };
 
-
-  
-  
   return (
     <html lang="en">
-      {/*
-        <head /> will contain the components returned by the nearest parent
-        head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
-      */}
       <head />
       <body className="bg-gray-50">
         <Navbar />
@@ -40,12 +32,16 @@ export default function RootLayout({
               header ads
             </div>
           </div>
-          <div className="w-full flex">
+          <div className="w-full flex min-h-max">
             <div className="lg:w-3/4 w-full m-2 ">{children}</div>
-            <div className="lg:w-1/4 lg:flex  w-full hidden bg-gray-300 m-2 rounded-md ">ads</div>
+            <div className="  lg:w-1/4 lg:flex  w-full hidden bg-gray-300 m-2 justify-center items-center text-gray-500 font-bold rounded-md ">
+              ads
+            </div>
           </div>
         </main>
+        <div className="relative bottom-0">
           <FooterSimple links={Links.links} />
+        </div>
       </body>
     </html>
   );

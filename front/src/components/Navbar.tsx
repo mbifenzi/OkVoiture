@@ -31,6 +31,7 @@ import {
   IconChevronDown,
 } from "@tabler/icons-react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import logo from "../assets/logo.png";
 
 import { useState, useEffect, Fragment } from "react";
 import SignUpModal from "@/modals/SignUpModal";
@@ -140,18 +141,41 @@ const mockdata = [
     description: "Combusken battles with the intensely hot flames it spews",
   },
 ];
-const DropDown = () => {
+const DropDown = (id: any) => {
   function classNames(...classes: any) {
     return classes.filter(Boolean).join(" ");
   }
   const [showPostModal, setShowPostModal] = useState(false);
+
+  const handleSignout = async () => {
+    const res = await fetch("http://localhost:3000/auth/logout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+    if (res.status === 200) {
+      document.cookie = "jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      localStorage.removeItem("jwt");
+      window.location.reload();
+    }
+  };
+
+  // console.log("id", id);
 
   return (
     <div className="hidden md:flex">
       <Menu as="div" className="relative inline-block text-left rounded-full">
         <div>
           <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-            <Image src={avatar.src} width={20} height={20} alt="profil" radius={50} />
+            <Image
+              src={avatar.src}
+              width={20}
+              height={20}
+              alt="profil"
+              radius={50}
+            />
 
             <ChevronDownIcon
               className="-mr-1 h-5 w-5 text-gray-400"
@@ -184,11 +208,11 @@ const DropDown = () => {
                   </a>
                 )}
               </Menu.Item>
-          
+
               <Menu.Item>
                 {({ active }) => (
                   <a
-                    href="/u/123"
+                    href={`/u/${id.id} `}
                     className={classNames(
                       active ? "bg-gray-100 text-gray-900" : "text-gray-700",
                       "block px-4 py-2 text-sm"
@@ -201,8 +225,9 @@ const DropDown = () => {
               <Menu.Item>
                 {({ active }) => (
                   <p
-                    onClick={() => { setShowPostModal(true); }  
-                    }
+                    onClick={() => {
+                      setShowPostModal(true);
+                    }}
                     className={classNames(
                       active ? "bg-gray-100 text-gray-900" : "text-gray-700",
                       "block px-4 py-2 text-sm"
@@ -222,6 +247,9 @@ const DropDown = () => {
                         active ? "bg-gray-100 text-gray-900" : "text-gray-700",
                         "block w-full px-4 py-2 text-left text-sm"
                       )}
+                      onClick={() => {
+                        handleSignout();
+                      }}
                     >
                       Sign out
                     </button>
@@ -233,11 +261,11 @@ const DropDown = () => {
         </Transition>
       </Menu>
       {showPostModal && (
-          <PostModal
-            showPostModal={showPostModal}
-            setShowPostModal={setShowPostModal}
-          />
-        )}
+        <PostModal
+          showPostModal={showPostModal}
+          setShowPostModal={setShowPostModal}
+        />
+      )}
     </div>
   );
 };
@@ -250,7 +278,7 @@ const Navbar = () => {
   const [showSignupModal, setShowSignupModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showPostModal, setShowPostModal] = useState(false);
-  const [userData, setUseData] = useState(null);
+  const [userData, setUseData] = useState(null as any);
   const [isLoggedin, setIsLoggedin] = useState(false);
 
   const fetchUser = async () => {
@@ -308,7 +336,7 @@ const Navbar = () => {
             className={classes.hiddenMobile}
           >
             <Link href="/" className="p-2">
-              Logo
+              <Image src={logo.src} width={160} height={44} alt="logo" />
             </Link>
           </Group>
           {userData ? (
@@ -332,7 +360,7 @@ const Navbar = () => {
             //   </Button>
             // </Group>
             <>
-              <DropDown />
+              <DropDown id={userData?.id} />
             </>
           ) : (
             <Group className={classes.hiddenMobile}>
@@ -349,6 +377,7 @@ const Navbar = () => {
                   setShowSignupModal(true);
                   console.log(showSignupModal);
                 }}
+                variant="default"
               >
                 Sign up
               </Button>
@@ -386,7 +415,7 @@ const Navbar = () => {
             Home
           </Link>
           <Collapse in={linksOpened}>{links}</Collapse>
-          <Link href="/u/123" className={classes.link}>
+          <Link href={`/u/${userData?.id}`} className={classes.link}>
             profilem
           </Link>
           <Divider
@@ -429,8 +458,9 @@ const Navbar = () => {
                   setShowSignupModal(true);
                   toggleDrawer();
                 }}
+                variant="default"
               >
-                Sign upm
+                Sign up
               </Button>
             </Group>
           )}

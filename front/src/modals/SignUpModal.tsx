@@ -123,7 +123,7 @@ const SignUpModal = ({
             
           </Group>
           
-          <Button fullWidth mt="xl" variant="default" color="blue" onClick={() => handleSignup()}>
+          <Button fullWidth mt="xl" variant="default" color="blue" onClick={() => {handleSignup(); setShowSignupModal(false)}}>
             Sign up
           </Button>
 

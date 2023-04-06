@@ -87,7 +87,7 @@ const UserCardImage = () => {
 
   const fetchPosts = async () => {
     try {
-      const res = await Axios.get("http://localhost:3000/post/all").then(
+      const res = await Axios.get("http://localhost:3000/post/").then(
         (res) => {
           setPosts(res.data);
           console.log("poooosts", posts);

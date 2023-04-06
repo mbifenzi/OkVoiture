@@ -104,7 +104,7 @@ const LoginModal = ({
             Forgot password?
           </Anchor>
         </Group>
-        <Button fullWidth mt="xl" onClick={handleLogin}>
+        <Button variant="default" fullWidth mt="xl" onClick={handleLogin}>
           Sign in
         </Button>
       </Paper>

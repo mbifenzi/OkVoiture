@@ -198,7 +198,7 @@ export function AnnouncementsMiniCards(post: any) {
   const { classes } = useStyles();
   const features = mockdata.map((feature) => (
     <Center key={feature.label}>
-      <feature.icon size={18} className={classes.icon} stroke={1.5} />
+      <feature.icon size={18} className={classes.icon} stroke="1,5"/>
       <Text size="xs">{feature.label}</Text>
     </Center>
   ));
@@ -256,13 +256,12 @@ export function AnnouncementsMiniCards(post: any) {
       </div>
       <div className="border-b-2 border-gray-200">
         <Text size="sm" color="dimmed">
-          lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum
-          dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet
-          lorem
+          {Post.car_description}
         </Text>
       </div>
 
-      <Button variant="light" color="blue" fullWidth mt="md" radius="md">
+      <Button variant="light" color="blue" fullWidth mt="md" radius="md"
+      onClick={() => alert("Booking Coming Soon")}>
         Book Now
       </Button>
     </Card>

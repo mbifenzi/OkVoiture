@@ -103,7 +103,7 @@ const CarListItem = ({
   }
 
   let carImageLink = metadata.car_image[0].split("./");
-  console.log("carImageLink", carImageLink[1]);
+  // console.log("carImageLink", carImageLink[1]);
 
   return (
     <div
@@ -141,6 +141,7 @@ const CarListItem = ({
 const CarList = () => {
   const [showModal, setShowModal] = React.useState(false);
   const [posts, setPosts] = React.useState<any>([]);
+  const [singlePost, setSinglePost] = React.useState<any>();
 
   const fetchPosts = async () => {
     try {
@@ -148,8 +149,8 @@ const CarList = () => {
         .get("http://localhost:3000/post/all")
         .then((res) => {
           // console.log(res.data);
-          setPosts(res.data);
-          console.log(posts.car_image);
+          setPosts(res.data.reverse());
+          // console.log("hado posts", res.data.reverse());
         });
     } catch (err) {
       console.log(err);
@@ -163,16 +164,16 @@ const CarList = () => {
     <div className="w-full flex flex-col gap-6">
       <SearchBar />
       <div className="w-full flex flex-col gap-6">
-        {posts.map((post: any) => (
+        {posts.reverse().map((post: any) => (
           <CarListItem
             key={post.id}
             metadata={post}
-            onClick={() => setShowModal(true)}
+            onClick={() => {setShowModal(true); setSinglePost(post)}}
           />
         ))}
         {showModal && (
           <div>
-            <CarListItemModal setShowModal={setShowModal} showModal={true} />
+            <CarListItemModal post={singlePost} setShowModal={setShowModal} showModal={true} />
           </div>
         )}
       </div>

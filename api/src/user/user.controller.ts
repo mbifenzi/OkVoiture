@@ -1,13 +1,15 @@
 import { Controller, Get, Param, Req, UseGuards } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { Request } from 'express';
 
 import { JwtGuard } from 'src/auth/guard';
+import { PrismaService } from 'src/prisma/prisma.service';
 
-@UseGuards(JwtGuard)
 @Controller('users')
 export class UserController {
-  //   constructor() {}
+  constructor(private prisma: PrismaService) {}
 
+  @UseGuards(JwtGuard)
   @Get('me')
   async getUser(@Req() req: Request) {
     const cookie = req.cookies['token'];
@@ -17,6 +19,9 @@ export class UserController {
 
   @Get(':id')
   getUserData(@Param('id') id: string) {
-    return { id };
+    const numid = parseInt(id);
+    return this.prisma.user.findUnique({
+      where: { id: numid },
+    });
   }
 }

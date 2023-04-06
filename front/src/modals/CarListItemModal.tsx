@@ -2,15 +2,16 @@ import { Avatar, Modal, Paper, useMantineTheme } from "@mantine/core";
 import { Carousel } from "@mantine/carousel";
 import React from "react";
 import photos from "@/assets/default_car.jpg";
-import Image from "next/image";
+import { Image } from "@mantine/core";
 import data from "@/context/data.json";
 import { AiOutlineHeart } from "react-icons/ai";
 import { Card, Text, Badge, Button, Group } from "@mantine/core";
 
 import defaultImage from "@/assets/author.jpg";
+import { Tex } from "tabler-icons-react";
+import axios from "axios";
 
 const AnnouncerCard = ({ announcerData }: { announcerData: any }) => {
-  console.log(announcerData);
   return (
     <Paper
       radius="md"
@@ -23,10 +24,10 @@ const AnnouncerCard = ({ announcerData }: { announcerData: any }) => {
     >
       <Avatar src={defaultImage.src} size={120} radius={120} mx="auto" />
       <Text align="center" size="lg" weight={500} mt="md">
-        {announcerData.name}
+        {announcerData?.firstName} {announcerData?.lastName}
       </Text>
       <Text align="center" color="dimmed" size="sm">
-        {announcerData.email}
+        {announcerData?.email}
       </Text>
 
       <Button variant="default" fullWidth mt="md">
@@ -40,14 +41,40 @@ const AnnouncerCard = ({ announcerData }: { announcerData: any }) => {
 };
 
 const CarListItemModal = ({
+  post,
   showModal,
   setShowModal,
 }: {
+  post: any;
   showModal: boolean;
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const theme = useMantineTheme();
-  // console.log(data);
+  // console.log("post", post);
+  const [announcer, setAnnouncer] = React.useState<any>();
+
+  const fetchAnnouncer = async () => {
+    try {
+      const res = await axios
+        .get(`http://localhost:3000/users/${post.authorId}`)
+        .then((res) => {
+          // console.log(res.data);
+          setAnnouncer(res.data);
+          // console.log(posts.car_image);
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const imageLink = post.car_image[0].split("./");
+  const configs = post.car_config.split(",");
+
+  React.useEffect(() => {
+    fetchAnnouncer();
+    // console.log("announcer", announcer);
+  }, []);
+
   return (
     <Modal
       overflow="inside"
@@ -66,53 +93,29 @@ const CarListItemModal = ({
       size="80%"
     >
       <div className="w-full flex flex-col justify-between gap-8">
-        <div className="flex flex-row justify-center items-center">
-          <div className="w-2/3 flex flex-col justify-around  gap-4">
-            <div className=" h-400px w-full flex justify-center items-center">
-              <Carousel
-                sx={{ maxWidth: 320 }}
-                height="100%"
-                nextControlIcon={<AiOutlineHeart size={16} />}
-                previousControlIcon={<AiOutlineHeart size={16} />}
-              >
-                {data[0].car_image.map((photo) => (
-                  <Carousel.Slide key={photo}>
-                    <Image src={photos} alt={""} width={320} height={300} />
-                  </Carousel.Slide>
-                ))}
-              </Carousel>
+        <div className="flex h-96 flex-row justify-center items-center">
+          <div className="w-1/2 h-60 flex flex-col justify-around  gap-4">
+            <div className=" h-60  w-full flex justify-center items-center">
+              <Image
+                src={`http://localhost:3000/${imageLink[1]}`}
+                width="auto"
+                height={350}
+                alt="car"
+              />
             </div>
-            <Card.Section className="w-full flex justify-center items-center">
-              <Group spacing={30}>
-                <div>
-                  <Text size="xl" weight={700} sx={{ lineHeight: 1 }}>
-                    $168.00
-                  </Text>
-                  <Text
-                    size="sm"
-                    color="dimmed"
-                    weight={500}
-                    sx={{ lineHeight: 1 }}
-                    mt={3}
-                  >
-                    per day
-                  </Text>
-                </div>
-                <button className="bg-blue-600 text-white p-3 rounded-md hover:bg-blue-400 duration-300 text-center">
-                  RENT NOW
-                </button>
-              </Group>
-            </Card.Section>
           </div>
-          <div className="w-1/3">
-            <AnnouncerCard announcerData={data[0].owner} />
+          <div className="w-1/3 p-2">
+            <AnnouncerCard announcerData={announcer} />
           </div>
         </div>
         <div className="pl-20">
           <div className="mt-3 h-px bg-gray-200 w-full" />
           <Group position="apart" mt="md" className="w-3/4">
             <div>
-              <Text weight={500}>Tesla Model S</Text>
+              <div className="flex flex-row justify-between">
+                <Text weight={500}>{post.car_price}</Text>
+                <Text weight={500}>{post.car_name}</Text>
+              </div>
               <Text size="xs" color="dimmed">
                 Free recharge at any station
               </Text>
@@ -125,9 +128,9 @@ const CarListItemModal = ({
               Basic configuration
             </Text>
             <Group spacing={8}>
-              {data[0].features.map((feature) => (
-                <Badge key={feature} variant="outline" className="hover:bg-blue-500 hover:text-white duration-300 cursor-pointer">
-                  {feature}
+              {configs.map((config: any) => (
+                <Badge key={config} variant="outline">
+                  {config}
                 </Badge>
               ))}
             </Group>
@@ -138,11 +141,21 @@ const CarListItemModal = ({
               Description
             </Text>
             <Text size="sm" color="dimmed">
-              {data[0].car_description}
+              {post.car_description}
             </Text>
           </Card.Section>
         </div>
       </div>
+      <Button
+        variant="default"
+        color="blue"
+        fullWidth
+        mt="md"
+        radius="md"
+        onClick={() => alert("Booking Coming Soon")}
+      >
+        Book Now
+      </Button>
     </Modal>
   );
 };
